@@ -1,7 +1,9 @@
 package com.eattogether.config;
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
@@ -15,5 +17,11 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
                 .mvcMatchers("/","/login","/sign-up","/check-email-token","login-by-email",
                         "/email-login","/check-email-login","login-link").permitAll()
                 .anyRequest().authenticated();  // 나머지는 로그인을 통해서만 접근가능
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring() // js/css/image 파일 등 보안필터를 적용할 필요없는 리소스 설정
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 }
