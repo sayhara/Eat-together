@@ -1,14 +1,13 @@
 package com.eattogether.domain;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter @EqualsAndHashCode(of="id")
+@Builder @AllArgsConstructor @NoArgsConstructor
 public class Account {
 
     @Id @GeneratedValue
@@ -21,6 +20,8 @@ public class Account {
     private String nickname;
 
     private String password;
+
+    private String passwordRepeat;
 
     private boolean emailVerified;
 

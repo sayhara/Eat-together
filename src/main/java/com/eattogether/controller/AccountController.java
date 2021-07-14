@@ -1,7 +1,11 @@
 package com.eattogether.controller;
 
+import com.eattogether.domain.Account;
 import com.eattogether.dto.SignUpForm;
+import com.eattogether.repository.AccountRepository;
+import com.eattogether.service.AccountService;
 import com.eattogether.validator.SignUpFormValidator;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +21,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class AccountController {
 
     private final SignUpFormValidator signUpFormValidator;
+    private final AccountRepository accountRepository;
+    private final AccountService accountService;
 
     @InitBinder("signUpForm")
     public void initBinder(WebDataBinder webDataBinder){
@@ -35,7 +41,9 @@ public class AccountController {
         if(errors.hasErrors()){
             return "account/sign-up";
         }
-
+        Account account = accountService.makeAccount(signUpForm);//새로운 계정생성
+        accountService.login(account);  // 로그인
         return "redirect:/";
     }
+
 }
