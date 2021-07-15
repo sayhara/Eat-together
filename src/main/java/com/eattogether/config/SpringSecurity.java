@@ -22,6 +22,7 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring() // js/css/image 파일 등 보안필터를 적용할 필요없는 리소스 설정
+                .mvcMatchers("/node_modules/**") // node_modules로 시작하는 플러그인 허용
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 }
