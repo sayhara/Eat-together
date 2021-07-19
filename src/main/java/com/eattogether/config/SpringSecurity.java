@@ -17,6 +17,11 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
                 .mvcMatchers("/","/login","/sign-up","/check-email-token","login-by-email",
                         "/email-login","/check-email-login","login-link").permitAll()
                 .anyRequest().authenticated();  // 나머지는 로그인을 통해서만 접근가능
+
+        http.formLogin()
+                .loginPage("/login").permitAll(); // 커스텀 로그인 Page
+
+        http.logout().logoutUrl("/");   // 커스텀 로그아웃 Page
     }
 
     @Override
