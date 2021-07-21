@@ -21,11 +21,7 @@ public class Account {
 
     private String password;
 
-    private String passwordRepeat;
-
-    private boolean emailVerified;
-
-    private String emailCheckToken;
+    private String passwordRepeat; // 비밀번호 재확인
 
     @Lob @Basic(fetch = FetchType.EAGER)    // 대용량 & 즉시로딩
     private String profileImage;    // 프로필 이미지
@@ -38,15 +34,9 @@ public class Account {
 
     private String location;    // 위치
 
-    private boolean eatCreatedByEmail; // 개설 - 이메일로 받기
-
     private boolean eatCreatedByWeb; // 개설 - 웹으로 받기
 
-    private boolean eatEnrollmentResultByEmail; // 참가신청 - 이메일로 받기
-
     private boolean eatEnrollmentResultByWeb; // 참가신청 - 웹으로 받기
-
-    private boolean eatUpdatedByEmail; // 관심있는 곳 - 이메일로 받기
 
     private boolean eatUpdatedByWeb; // - 관심있는 곳 - 웹으로 받기
 

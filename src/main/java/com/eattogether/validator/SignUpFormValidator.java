@@ -23,7 +23,7 @@ public class SignUpFormValidator implements Validator {
 
         SignUpForm signUpForm= (SignUpForm) target;
 
-        if(signUpForm.getPassword().equals(signUpForm.getPasswordRepeat())){
+        if(!signUpForm.getPassword().equals(signUpForm.getPasswordRepeat())){
             errors.rejectValue("password","invalid password",
                     new Object[]{signUpForm.getPassword()},"비밀번호가 서로 일치하지 않습니다.");
         }
@@ -37,6 +37,5 @@ public class SignUpFormValidator implements Validator {
             errors.rejectValue("email", "invalid email",
                     new Object[]{signUpForm.getEmail()}, "이미 사용중인 이메일 입니다.");
         }
-
     }
 }
