@@ -10,7 +10,7 @@ import java.util.List;
 
 @Getter
 public class UserAccount extends User {
-
+// 스프링 시큐리티 유저정보와 도메인 유저정보의 gap을 없앰
     private Account account;
 
     public UserAccount(Account account) {
