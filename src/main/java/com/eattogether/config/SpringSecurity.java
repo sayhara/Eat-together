@@ -21,7 +21,8 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
         http.formLogin()
                 .loginPage("/login").permitAll(); // 커스텀 로그인 Page
 
-        http.logout().logoutUrl("/");   // 커스텀 로그아웃 Page
+        http.logout()
+                .logoutSuccessUrl("/") ;   // 커스텀 로그아웃 Page
     }
 
     @Override

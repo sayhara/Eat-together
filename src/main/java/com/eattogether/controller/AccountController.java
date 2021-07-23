@@ -43,6 +43,7 @@ public class AccountController {
         }
         Account account = accountService.makeAccount(signUpForm);//새로운 계정생성
         accountService.login(account);  // 로그인
+
         return "redirect:/";
     }
 

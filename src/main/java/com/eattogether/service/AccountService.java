@@ -29,7 +29,7 @@ public class AccountService implements UserDetailsService {
         Account account = Account.builder()
                 .nickname(signUpForm.getNickname())
                 .email(signUpForm.getEmail())
-                .password(signUpForm.getPassword())
+                .password(passwordEncoder.encode(signUpForm.getPassword()))
                 .passwordRepeat(passwordEncoder.encode(signUpForm.getPasswordRepeat()))
                 .eatCreatedByWeb(true)
                 .build();

@@ -10,11 +10,16 @@ public class MainController {
 
     @GetMapping("/")
     public String mainPage(@AuthUser Account account, Model model){
+
         if(account!=null){
             model.addAttribute(account);
         }
 
         return "main";
+    }
 
+    @GetMapping("/login")
+    public String login(){
+        return "login";
     }
 }
