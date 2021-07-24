@@ -1,5 +1,6 @@
 package com.eattogether.controller;
 
+import com.eattogether.domain.Account;
 import com.eattogether.dto.SignUpForm;
 import com.eattogether.repository.AccountRepository;
 import com.eattogether.service.AccountService;
@@ -17,8 +18,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -50,20 +50,22 @@ public class MainControllerTest {
     @Test
     void login_test_success() throws Exception {
         mockMvc.perform(post("/login")
-        .param("nickname","gyuwon12")
+        .param("username","gyuwon12")
         .param("password","123456789")
+        .param("passwordRepeat","123456789")
         .with(csrf()))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl("/"))
-        .andExpect(authenticated().withUsername("gyuwon"));
+        .andExpect(authenticated().withUsername("gyuwon12"));
     }
 
     @DisplayName("로그인 실패")
     @Test
     void login_test_fail() throws Exception {
         mockMvc.perform(post("/login")
-                .param("nickname","gyuwon123")
+                .param("username","gyuwon123")
                 .param("password","123456")
+                .param("passwordRepeat","123456")
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/login?error"))
