@@ -1,7 +1,7 @@
 package com.eattogether.service;
 
 import com.eattogether.domain.Account;
-import com.eattogether.domain.UserAccount;
+import com.eattogether.controller.UserAccount;
 import com.eattogether.dto.SignUpForm;
 import com.eattogether.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;

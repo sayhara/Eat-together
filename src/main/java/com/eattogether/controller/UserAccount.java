@@ -1,12 +1,12 @@
-package com.eattogether.domain;
+package com.eattogether.controller;
 
-import lombok.Getter;
-import org.springframework.security.core.GrantedAuthority;
+import java.util.List;
+
+import com.eattogether.domain.Account;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-import java.util.Collection;
-import java.util.List;
+import lombok.Getter;
 
 @Getter
 public class UserAccount extends User {
