@@ -31,6 +31,8 @@ public class Account {
     private String bio; // 소개
 
     private int age;    // 나이
+    
+    private String major; // 전공
 
     private String location;    // 위치
 

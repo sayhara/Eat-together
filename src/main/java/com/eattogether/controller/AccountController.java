@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -46,5 +47,20 @@ public class AccountController {
 
         return "redirect:/";
     }
+
+    @GetMapping("/profile/{nickname}")
+    public String ProfilePage(@AuthUser Account account,
+                              @PathVariable String nickname, Model model){
+        Account byNickname = accountRepository.findByNickname(nickname);
+
+        if(byNickname==null){
+            throw new IllegalArgumentException(nickname+"에 해당하는 사용자가 없습니다.");
+        }
+
+        model.addAttribute(byNickname);
+        model.addAttribute("isOwner",byNickname.equals(account));
+        return "account/profile";
+    }
+
 
 }

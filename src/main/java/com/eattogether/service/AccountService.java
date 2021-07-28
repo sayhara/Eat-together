@@ -48,16 +48,12 @@ public class AccountService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String emailOrNickname) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String nickname) throws UsernameNotFoundException {
 
-        Account account=accountRepository.findByEmail(emailOrNickname);
-
-        if(account==null){
-            account=accountRepository.findByNickname(emailOrNickname);
-        }
+        Account account=accountRepository.findByNickname(nickname);
 
         if(account==null){
-            throw new UsernameNotFoundException(emailOrNickname); // 닉네임 에러
+            throw new UsernameNotFoundException(nickname); // 닉네임 에러
         }
         return new UserAccount(account);
     }
