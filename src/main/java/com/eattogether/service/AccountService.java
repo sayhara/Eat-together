@@ -2,6 +2,7 @@ package com.eattogether.service;
 
 import com.eattogether.domain.Account;
 import com.eattogether.controller.UserAccount;
+import com.eattogether.dto.Profile;
 import com.eattogether.dto.SignUpForm;
 import com.eattogether.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
@@ -56,5 +57,13 @@ public class AccountService implements UserDetailsService {
             throw new UsernameNotFoundException(nickname); // 닉네임 에러
         }
         return new UserAccount(account);
+    }
+
+    public void profileUpdate(Account account, Profile profile){
+        account.setAge(profile.getAge());
+        account.setBio(profile.getBio());
+        account.setMajor(profile.getMajor());
+        account.setLocation(profile.getLocation());
+        accountRepository.save(account);
     }
 }

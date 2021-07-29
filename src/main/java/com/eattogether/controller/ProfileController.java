@@ -3,17 +3,22 @@ package com.eattogether.controller;
 import com.eattogether.domain.Account;
 import com.eattogether.dto.Profile;
 import com.eattogether.repository.AccountRepository;
+import com.eattogether.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
 public class ProfileController {
 
     private final AccountRepository accountRepository;
+    private final AccountService accountService;
 
     @GetMapping("/profile/{nickname}")
     public String ProfilePage(@AuthUser Account account,
@@ -36,5 +41,18 @@ public class ProfileController {
         // model.addAttribute(String name, Object value)
         // model.addAttribute(Object value)
         return "settings/profile";
+    }
+
+    @PostMapping("/setting/profile")
+    public String profileUpdate(@AuthUser Account account, Profile profile,
+                                Errors errors, Model model, RedirectAttributes attributes){
+        if(errors.hasErrors()){
+            model.addAttribute(account);
+            return "settings/profile";
+        }
+        accountService.profileUpdate(account,profile);
+        attributes.addFlashAttribute("message","프로필을 수정했습니다.");
+        return "redirect:/settings/profile";
+
     }
 }

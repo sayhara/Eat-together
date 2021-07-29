@@ -2,8 +2,10 @@ package com.eattogether.dto;
 
 import com.eattogether.domain.Account;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class Profile {
 
     private String bio; // 소개
