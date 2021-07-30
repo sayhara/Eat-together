@@ -62,7 +62,8 @@
             <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown"
                    role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    프로필
+                    <img th:if="${!#strings.isEmpty(account.profileImage)}" class="rounded"
+                         th:src="${account.profileImage}" width="25" height="25"/>
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-sm-right" aria-labelledby="userDropdown">

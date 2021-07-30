@@ -43,7 +43,7 @@ public class ProfileController {
         return "settings/profile";
     }
 
-    @PostMapping("/setting/profile")
+    @PostMapping("/settings/profile")
     public String profileUpdate(@AuthUser Account account, Profile profile,
                                 Errors errors, Model model, RedirectAttributes attributes){
         if(errors.hasErrors()){

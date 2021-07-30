@@ -14,12 +14,15 @@ public class Profile {
 
     private String major; // 전공
 
-    private String location;
+    private String location; // 지역
+
+    private String profileImage; // 프로필 이미지
 
         public Profile(Account account) {
         this.bio = account.getBio();
         this.age = account.getAge();
         this.major = account.getMajor();
         this.location=account.getLocation();
+        this.profileImage=account.getProfileImage();
     }
 }

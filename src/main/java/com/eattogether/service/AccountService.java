@@ -26,7 +26,6 @@ public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Transactional
     public Account makeAccount(SignUpForm signUpForm){
         Account account = Account.builder()
                 .nickname(signUpForm.getNickname())
@@ -64,6 +63,7 @@ public class AccountService implements UserDetailsService {
         account.setBio(profile.getBio());
         account.setMajor(profile.getMajor());
         account.setLocation(profile.getLocation());
+        account.setProfileImage(profile.getProfileImage());
         accountRepository.save(account);
     }
 }
