@@ -2,6 +2,7 @@ package com.eattogether.service;
 
 import com.eattogether.domain.Account;
 import com.eattogether.controller.UserAccount;
+import com.eattogether.dto.PasswordForm;
 import com.eattogether.dto.Profile;
 import com.eattogether.dto.SignUpForm;
 import com.eattogether.repository.AccountRepository;
@@ -64,6 +65,11 @@ public class AccountService implements UserDetailsService {
         account.setMajor(profile.getMajor());
         account.setLocation(profile.getLocation());
         account.setProfileImage(profile.getProfileImage());
+        accountRepository.save(account);
+    }
+
+    public void passwordUpdate(Account account, PasswordForm passwordForm) {
+        account.setPassword(passwordEncoder.encode(passwordForm.getNewPassword()));
         accountRepository.save(account);
     }
 }

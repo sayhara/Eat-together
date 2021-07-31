@@ -25,7 +25,7 @@ public class SignUpFormValidator implements Validator {
 
         if(!signUpForm.getPassword().equals(signUpForm.getPasswordRepeat())){
             errors.rejectValue("password","invalid password",
-                    new Object[]{signUpForm.getPassword()},"비밀번호가 서로 일치하지 않습니다.");
+                    "비밀번호가 서로 일치하지 않습니다.");
         }
 
         if(accountRepository.existsByNickname(signUpForm.getNickname())){
