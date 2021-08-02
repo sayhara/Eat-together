@@ -64,6 +64,7 @@
                     <label for="password">비밀번호</label>
                     <input id="password" type="password" th:field="*{password}" class="form-control"
                            aria-describedby="passwordHelp" required minlength="8" maxlength="20">
+                    <small class="invalid-feedback">패스워드를 입력하세요.</small>
                     <small id="passwordHelp" class="form-text text-muted">
                         <div>패스워드는 8자 이상 20자 이내로 입력하세요.</div>
                     </small>
@@ -72,7 +73,7 @@
                 <div class="form-group">
                     <label for="password">비밀번호 재입력</label>
                     <input id="passwordrepeat" type="password" th:field="*{passwordRepeat}" class="form-control"
-                           aria-describedby="passwordHelp" required minlength="8" maxlength="50">
+                           aria-describedby="passwordHelp" required minlength="8" maxlength="20">
                     <small class="invalid-feedback">패스워드를 입력하세요.</small>
                     <small id="passwordRepeatHelp" class="form-text text-muted">
                         <div>패스워드는 서로 일치하게 해주세요.</div>

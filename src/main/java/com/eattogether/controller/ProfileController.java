@@ -1,6 +1,7 @@
 package com.eattogether.controller;
 
 import com.eattogether.domain.Account;
+import com.eattogether.dto.Alarm;
 import com.eattogether.dto.PasswordForm;
 import com.eattogether.dto.Profile;
 import com.eattogether.repository.AccountRepository;
@@ -26,7 +27,7 @@ public class ProfileController {
     private final AccountService accountService;
     private final PasswordFormValidator passwordFormValidator;
 
-    @InitBinder
+    @InitBinder("passwordForm")
     public void initBinder(WebDataBinder webDataBinder){
         webDataBinder.addValidators(passwordFormValidator);
     }
@@ -83,5 +84,25 @@ public class ProfileController {
         accountService.passwordUpdate(account,passwordForm);
         attributes.addFlashAttribute("message","패스워드를 수정했습니다.");
         return "redirect:/settings/password";
+    }
+
+    @GetMapping("/settings/alarm")
+    public String alarmSettings(@AuthUser Account account, Model model){
+        model.addAttribute(account);
+        model.addAttribute(new Alarm(account));
+        return "settings/alarm";
+    }
+
+    @PostMapping("/settings/alarm")
+    public String alarmUpdate(@AuthUser Account account, Alarm alarm, Errors errors,
+                                      Model model, RedirectAttributes attributes){
+        if(errors.hasErrors()){
+            model.addAttribute(account);
+            return "settings/alarm";
+        }
+
+        accountService.alarmUpdate(account,alarm);
+        attributes.addFlashAttribute("message","알림 설정을 변경했습니다.");
+        return "redirect:/settings/alarm";
     }
 }
