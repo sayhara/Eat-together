@@ -2,6 +2,7 @@ package com.eattogether.service;
 
 import com.eattogether.domain.Account;
 import com.eattogether.controller.UserAccount;
+import com.eattogether.domain.Tag;
 import com.eattogether.dto.*;
 import com.eattogether.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -81,5 +83,13 @@ public class AccountService implements UserDetailsService {
     public void nicknameUpdate(Account account, NicknameForm nicknameForm) {
         account.setNickname(nicknameForm.getNickname());
         accountRepository.save(account);
+    }
+
+    public void addTag(Account account, Tag tag) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+
+        if(byId!=null){
+            account.getTags().add(tag);
+        }
     }
 }

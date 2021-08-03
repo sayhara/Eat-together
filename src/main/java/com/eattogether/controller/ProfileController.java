@@ -1,24 +1,21 @@
 package com.eattogether.controller;
 
 import com.eattogether.domain.Account;
-import com.eattogether.dto.Alarm;
-import com.eattogether.dto.NicknameForm;
-import com.eattogether.dto.PasswordForm;
-import com.eattogether.dto.Profile;
+import com.eattogether.domain.Tag;
+import com.eattogether.dto.*;
 import com.eattogether.repository.AccountRepository;
+import com.eattogether.repository.TagRepository;
 import com.eattogether.service.AccountService;
 import com.eattogether.validator.NicknameFormValidator;
 import com.eattogether.validator.PasswordFormValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -29,6 +26,7 @@ public class ProfileController {
     private final AccountService accountService;
     private final PasswordFormValidator passwordFormValidator;
     private final NicknameFormValidator nicknameFormValidator;
+    private final TagRepository tagRepository;
 
     @InitBinder("passwordForm")
     public void passwordFormBinder(WebDataBinder webDataBinder){
@@ -134,5 +132,30 @@ public class ProfileController {
         attributes.addFlashAttribute("message","닉네임을 변경했습니다.");
         return "redirect:/settings/nickname";
     }
+
+    @GetMapping("/settings/tags")
+    public String tagsUpdate(@AuthUser Account account, Model model){
+        model.addAttribute(account);
+        return "settings/tags";
+    }
+
+    @PostMapping("/settings/tags/add")
+    @ResponseBody
+    public ResponseEntity<?> addTag(@AuthUser Account account, @RequestBody TagForm tagForm){
+
+        String tagTitle = tagForm.getTagTitle();
+        Tag tag = tagRepository.findByTitle(tagTitle);
+
+        if(tag==null){
+            tag=tagRepository.save(Tag.builder().title(tagForm.getTagTitle()).build());
+        }
+
+        accountService.addTag(account,tag);
+        return ResponseEntity.ok().build();
+
+
+
+    }
+
 
 }
