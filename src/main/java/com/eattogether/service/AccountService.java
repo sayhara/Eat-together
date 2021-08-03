@@ -2,10 +2,7 @@ package com.eattogether.service;
 
 import com.eattogether.domain.Account;
 import com.eattogether.controller.UserAccount;
-import com.eattogether.dto.Alarm;
-import com.eattogether.dto.PasswordForm;
-import com.eattogether.dto.Profile;
-import com.eattogether.dto.SignUpForm;
+import com.eattogether.dto.*;
 import com.eattogether.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -78,6 +75,11 @@ public class AccountService implements UserDetailsService {
         account.setEatCreatedByWeb(alarm.isEatCreatedByWeb());
         account.setEatEnrollmentResultByWeb(alarm.isEatEnrollmentResultByWeb());
         account.setEatUpdatedByWeb(alarm.isEatUpdatedByWeb());
+        accountRepository.save(account);
+    }
+
+    public void nicknameUpdate(Account account, NicknameForm nicknameForm) {
+        account.setNickname(nicknameForm.getNickname());
         accountRepository.save(account);
     }
 }

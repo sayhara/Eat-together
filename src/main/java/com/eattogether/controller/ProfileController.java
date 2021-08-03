@@ -2,10 +2,12 @@ package com.eattogether.controller;
 
 import com.eattogether.domain.Account;
 import com.eattogether.dto.Alarm;
+import com.eattogether.dto.NicknameForm;
 import com.eattogether.dto.PasswordForm;
 import com.eattogether.dto.Profile;
 import com.eattogether.repository.AccountRepository;
 import com.eattogether.service.AccountService;
+import com.eattogether.validator.NicknameFormValidator;
 import com.eattogether.validator.PasswordFormValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -26,10 +28,16 @@ public class ProfileController {
     private final AccountRepository accountRepository;
     private final AccountService accountService;
     private final PasswordFormValidator passwordFormValidator;
+    private final NicknameFormValidator nicknameFormValidator;
 
     @InitBinder("passwordForm")
-    public void initBinder(WebDataBinder webDataBinder){
+    public void passwordFormBinder(WebDataBinder webDataBinder){
         webDataBinder.addValidators(passwordFormValidator);
+    }
+
+    @InitBinder("nicknameForm")
+    public void nicknameFormBinder(WebDataBinder webDataBinder){
+        webDataBinder.addValidators(nicknameFormValidator);
     }
 
     @GetMapping("/profile/{nickname}")
@@ -105,4 +113,26 @@ public class ProfileController {
         attributes.addFlashAttribute("message","알림 설정을 변경했습니다.");
         return "redirect:/settings/alarm";
     }
+
+    @GetMapping("/settings/nickname")
+    public String nicknameSettings(@AuthUser Account account, Model model){
+        model.addAttribute(account);
+        model.addAttribute(new NicknameForm());
+        return "settings/nickname";
+    }
+
+    @PostMapping("/settings/nickname")
+    public String nicknameUpdate(@AuthUser Account account, @Validated NicknameForm nicknameForm,
+                                 Errors errors, Model model, RedirectAttributes attributes){
+        if(errors.hasErrors()){
+            model.addAttribute(account);
+            return "settings/nickname";
+        }
+
+        accountService.nicknameUpdate(account,nicknameForm);
+        accountService.login(account); // 로그아웃 필요없이 닉네임 바로 반영
+        attributes.addFlashAttribute("message","닉네임을 변경했습니다.");
+        return "redirect:/settings/nickname";
+    }
+
 }
