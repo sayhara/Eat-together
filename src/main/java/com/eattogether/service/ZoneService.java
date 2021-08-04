@@ -26,13 +26,12 @@ public class ZoneService {
     public void initData() throws IOException {
         if(zoneRepository.count()==0){
             Resource resource=new ClassPathResource("zone.xlsx");
-            List<String> zoneList = Files.readAllLines(resource.getFile().toPath(), StandardCharsets.UTF_8);
-            zoneList.stream()
+            List<Zone> zoneList = Files.readAllLines(resource.getFile().toPath(), StandardCharsets.UTF_8).stream()
                     .map(line->{
                         String[] split = line.split(",");
                         return Zone.builder().part1(split[0]).part2(split[1]).part3(split[2]).build();
                     }).collect(Collectors.toList());
-     //       zoneRepository.saveAll(zoneList);
+            zoneRepository.saveAll(zoneList);
         }
     }
 }
