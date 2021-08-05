@@ -21,4 +21,8 @@ public class Zone {
 
     private String part3;
 
+    @Override
+    public String toString() {
+        return String.format("%s(%s)/%s",part1,part2,part3);
+    }
 }

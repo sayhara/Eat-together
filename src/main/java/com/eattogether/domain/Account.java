@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -43,5 +44,8 @@ public class Account {
     private boolean eatEnrollmentResultByWeb=false; // 참가신청 - 웹으로 받기
 
     private boolean eatUpdatedByWeb=false; // - 관심있는 곳 - 웹으로 받기
+
+    @ManyToMany
+    private Set<Zone> zones=new HashSet<>();
 
 }

@@ -1,12 +1,17 @@
 package com.eattogether.controller;
 
 import com.eattogether.domain.Account;
+import com.eattogether.domain.Zone;
 import com.eattogether.dto.*;
 import com.eattogether.repository.AccountRepository;
+import com.eattogether.repository.ZoneRepository;
 import com.eattogether.service.AccountService;
 import com.eattogether.validator.NicknameFormValidator;
 import com.eattogether.validator.PasswordFormValidator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -14,6 +19,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,6 +32,8 @@ public class ProfileController {
     private final AccountService accountService;
     private final PasswordFormValidator passwordFormValidator;
     private final NicknameFormValidator nicknameFormValidator;
+    private final ZoneRepository zoneRepository;
+    private final ObjectMapper objectMapper;
 
     @InitBinder("passwordForm")
     public void passwordFormBinder(WebDataBinder webDataBinder){
@@ -128,4 +139,47 @@ public class ProfileController {
         attributes.addFlashAttribute("message","닉네임을 변경했습니다.");
         return "redirect:/settings/nickname";
     }
+
+    @GetMapping("/settings/zones")
+    public String zoneSettings(@AuthUser Account account, Model model) throws JsonProcessingException {
+        model.addAttribute(account);
+
+        Set<Zone> zones = accountService.getZones(account);
+        model.addAttribute("zones",zones.stream().map(Zone::toString).collect(Collectors.toList()));
+
+        List<String> allZones = zoneRepository.findAll().stream().map(Zone::toString).collect(Collectors.toList());
+        model.addAttribute("whitelist",objectMapper.writeValueAsString(allZones));
+
+        return "settings/zones";
+
+    }
+
+    @PostMapping("/settings/zones/add")
+    @ResponseBody
+    public ResponseEntity addZone(@AuthUser Account account, @RequestBody ZoneForm zoneForm){
+
+        Zone zone=zoneRepository.findByPart1andPart2(zoneForm.getPart1(),zoneForm.getPart2());
+
+        if (zone == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        accountService.addZone(account,zone);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/settings/zones/remove")
+    @ResponseBody
+    public ResponseEntity removeZone(@AuthUser Account account, @RequestBody ZoneForm zoneForm){
+
+        Zone zone = zoneRepository.findByPart1andPart2(zoneForm.getPart1(), zoneForm.getPart2());
+
+        if(zone==null){
+            return ResponseEntity.badRequest().build();
+        }
+
+        accountService.removeZone(account,zone);
+        return ResponseEntity.ok().build();
+    }
+
 }

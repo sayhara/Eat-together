@@ -2,6 +2,7 @@ package com.eattogether.service;
 
 import com.eattogether.domain.Account;
 import com.eattogether.controller.UserAccount;
+import com.eattogether.domain.Zone;
 import com.eattogether.dto.*;
 import com.eattogether.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
@@ -83,6 +84,21 @@ public class AccountService implements UserDetailsService {
     public void nicknameUpdate(Account account, NicknameForm nicknameForm) {
         account.setNickname(nicknameForm.getNickname());
         accountRepository.save(account);
+    }
+
+    public Set<Zone> getZones(Account account){
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        return byId.orElseThrow().getZones();
+    }
+
+    public void addZone(Account account, Zone zone){
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        byId.ifPresent(a->a.getZones().add(zone));
+    }
+
+    public void removeZone(Account account, Zone zone){
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        byId.ifPresent(a->a.getZones().remove(zone));
     }
 
 }

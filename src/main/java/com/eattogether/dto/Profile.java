@@ -18,7 +18,7 @@ public class Profile {
 
     private String profileImage; // 프로필 이미지
 
-        public Profile(Account account) {
+    public Profile(Account account) {
         this.bio = account.getBio();
         this.age = account.getAge();
         this.major = account.getMajor();
