@@ -158,7 +158,7 @@ public class ProfileController {
     @ResponseBody
     public ResponseEntity addZone(@AuthUser Account account, @RequestBody ZoneForm zoneForm){
 
-        Zone zone=zoneRepository.findByPart1andPart2(zoneForm.getPart1(),zoneForm.getPart2());
+        Zone zone=zoneRepository.findByPart1AndPart2(zoneForm.getPart1(),zoneForm.getPart2());
 
         if (zone == null) {
             return ResponseEntity.badRequest().build();
@@ -172,7 +172,7 @@ public class ProfileController {
     @ResponseBody
     public ResponseEntity removeZone(@AuthUser Account account, @RequestBody ZoneForm zoneForm){
 
-        Zone zone = zoneRepository.findByPart1andPart2(zoneForm.getPart1(), zoneForm.getPart2());
+        Zone zone = zoneRepository.findByPart1AndPart2(zoneForm.getPart1(), zoneForm.getPart2());
 
         if(zone==null){
             return ResponseEntity.badRequest().build();
