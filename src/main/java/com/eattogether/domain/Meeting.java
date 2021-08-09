@@ -17,10 +17,10 @@ public class Meeting {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="account_id")
+    @JoinColumn(name="account_id") // 상대 테이블의 id이름
     private Account manager;
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "meet_member") // 상대 테이블의 객체이름
     private Set<Account> members=new HashSet<>();
 
     @Column(unique = true)

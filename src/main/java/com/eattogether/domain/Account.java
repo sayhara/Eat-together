@@ -46,12 +46,12 @@ public class Account {
 
     private boolean eatUpdatedByWeb=false; // - 관심있는 곳 - 웹으로 받기
 
-    @OneToOne(mappedBy = "manager",fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "manager",fetch = FetchType.LAZY) // 상대 테이블의 객체이름
     private Meeting meeting;
 
-    @ManyToOne
-    @JoinColumn(name="meeting_id")
-    private Meeting members;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="meeting_id") // 상대 테이블의 id이름
+    private Meeting meet_member;
 
     @ManyToMany
     private Set<Zone> zones=new HashSet<>();
