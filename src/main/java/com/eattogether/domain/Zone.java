@@ -13,6 +13,7 @@ import javax.persistence.Id;
 public class Zone {
 
     @Id @GeneratedValue
+    @Column(name="zone_id")
     private Long id;
 
     private String part1;

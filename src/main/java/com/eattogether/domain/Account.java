@@ -14,6 +14,7 @@ import java.util.Set;
 public class Account {
 
     @Id @GeneratedValue
+    @Column(name="account_id")
     private Long id;
 
     @Column(unique = true)
@@ -44,6 +45,13 @@ public class Account {
     private boolean eatEnrollmentResultByWeb=false; // 참가신청 - 웹으로 받기
 
     private boolean eatUpdatedByWeb=false; // - 관심있는 곳 - 웹으로 받기
+
+    @OneToOne(mappedBy = "manager",fetch = FetchType.LAZY)
+    private Meeting meeting;
+
+    @ManyToOne
+    @JoinColumn(name="meeting_id")
+    private Meeting members;
 
     @ManyToMany
     private Set<Zone> zones=new HashSet<>();
