@@ -20,6 +20,7 @@ public class Meeting {
     @JoinColumn(name="account_id") // 상대 테이블의 id이름
     private Account manager;
 
+
     @OneToMany(mappedBy = "meet_member") // 상대 테이블의 객체이름
     private Set<Account> members=new HashSet<>();
 
