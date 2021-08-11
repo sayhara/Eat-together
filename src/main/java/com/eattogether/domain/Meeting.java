@@ -29,7 +29,10 @@ public class Meeting {
 
     private String title;
 
-    private String note;
+    private String short_note;
+
+    //@Lob @Basic(fetch = FetchType.EAGER)
+    private String long_note;
 
     @Lob @Basic(fetch = FetchType.EAGER)
     private String image;
@@ -50,4 +53,10 @@ public class Meeting {
     private boolean close; // 종료여부
     
     private boolean useBanner; // 베너 사용여부
+
+    //== 연관관계 메서드 ==//
+    public void addManager(Account manager){
+        this.manager=manager;
+        manager.setMeeting(this); // Meeting에 Manager 추가
+    }
 }

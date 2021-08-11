@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment.html :: head"></head>
+
+<body class="bg-light">
+<div th:replace="fragment.html :: navigation"></div>
+
+<div class="container">
+  <div class="py-5 text-center">
+    <h2>모임 개설</h2>
+  </div>
+  <div class="row justify-content-center">
+    <form class="needs-validation col-sm-10" action="#"
+          th:action="@{/new_meeting}" th:object="${meetingForm}" method="post" novalidate>
+      <div class="form-group">
+        <label for="url">모임 URL</label>
+        <input id="url" type="text" th:field="*{url}" class="form-control"
+               placeholder="www.naver.com" aria-describedby="urlHelp" min="5" max="30">
+        <small id="urlHelp" class="form-text text-muted">
+          공백없이 문자, 숫자, 대시(-)와 언더바(_)만 5자 이상 30자 이내로 입력하세요. 모임 홈 주소에 사용합니다.
+        </small>
+        <small class="invalid-feedback">모임의 경로를 입력하세요.</small>
+        <small class="form-text text-danger" th:if="${#fields.hasErrors('url')}" th:errors="*{url}">url Error</small>
+      </div>
+
+      <div class="form-group">
+        <label for="title">모임명</label>
+        <input id="title" type="text" th:field="*{title}" class="form-control"
+               placeholder="모임명" aria-describedby="titleHelp" required>
+        <small id="titleHelp" class="form-text text-muted">
+          모임명을 입력하세요.
+        </small>
+        <small class="invalid-feedback">모임 이름을 입력하세요.</small>
+        <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title Error</small>
+      </div>
+
+      <div class="form-group">
+        <label for="short_note">짧은 소개</label>
+        <textarea id="short_note" type="textarea" th:field="*{short_note}" class="form-control"
+                  placeholder="모임를 짧게 소개해 주세요." aria-describedby="short_noteHelp" required maxlength="50"></textarea>
+        <small id="short_noteHelp" class="form-text text-muted">
+          50자 이내로 모임를 짧게 소개해 주세요.
+        </small>
+        <small class="invalid-feedback">짧은 소개를 입력하세요.</small>
+        <small class="form-text text-danger" th:if="${#fields.hasErrors('short_note')}" th:errors="*{short_note}"></small>
+      </div>
+
+      <div class="form-group">
+        <label for="long_note">상세 소개</label>
+        <textarea id="long_note" type="textarea" th:field="*{long_note}" class="form-control"
+                  placeholder="모임를 자세히 소개해 주세요." aria-describedby="long_noteHelp"></textarea>
+        <small id="long_noteHelp" class="form-text text-muted">
+          모임의 주된 목적 및 시간과 장소를 정확하게 입력해 주세요.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <button class="btn btn-primary btn-block" type="submit"
+                aria-describedby="submitHelp">모임 만들기</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<script th:replace="fragment.html :: validation"></script>
+<script src="/node_modules/summernote/dist/summernote-bs4.js"></script>
+<script type="application/javascript">
+  $(function(){
+    $('#long_note').summernote({
+      fontNames:['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Noto Sans KR', 'Merriweather'],
+      placeholder:'모임의 주된 목적 및 시간과 장소를 정확하게 입력해 주세요.',
+      tabsize:2,
+      height:300
+    });
+  });
+</script>
+</body>
+</html>

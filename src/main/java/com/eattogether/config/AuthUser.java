@@ -1,4 +1,4 @@
-package com.eattogether.controller;
+package com.eattogether.config;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 

@@ -1,5 +1,6 @@
 package com.eattogether.controller;
 
+import com.eattogether.config.AuthUser;
 import com.eattogether.domain.Account;
 import com.eattogether.domain.Zone;
 import com.eattogether.dto.*;
