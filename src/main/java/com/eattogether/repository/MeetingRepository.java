@@ -8,4 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface MeetingRepository extends JpaRepository<Meeting, Long> {
 
     boolean existsByUrl(String url);
+
+    Meeting findByUrl(String url);
 }

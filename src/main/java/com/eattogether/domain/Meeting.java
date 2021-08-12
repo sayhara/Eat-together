@@ -1,5 +1,6 @@
 package com.eattogether.domain;
 
+import com.eattogether.controller.UserAccount;
 import lombok.*;
 
 import javax.persistence.*;
@@ -50,13 +51,29 @@ public class Meeting {
 
     private boolean is_publish; // 공개여부
     
-    private boolean close; // 종료여부
+    private boolean closed; // 종료여부
     
     private boolean useBanner; // 베너 사용여부
 
     //== 연관관계 메서드 ==//
-    public void addManager(Account manager){
+    public void setManager(Account manager){
         this.manager=manager;
         manager.setMeeting(this); // Meeting에 Manager 추가
     }
+
+    public boolean isJoinable(UserAccount userAccount){
+        Account account = userAccount.getAccount();
+
+        return this.is_recruit() && this.is_publish()
+                &&!this.members.contains(account) && !this.manager.equals(account);
+    }
+
+    public boolean isMember(UserAccount userAccount){
+        return this.members.contains(userAccount.getAccount());
+    }
+
+    public boolean isManager(UserAccount userAccount){
+        return this.manager.equals(userAccount.getAccount());
+    }
+
 }
