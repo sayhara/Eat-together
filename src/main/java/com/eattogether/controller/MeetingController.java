@@ -40,14 +40,16 @@ public class MeetingController {
     }
 
     @PostMapping("/new_meeting")
-    public String newMeetingPost(@AuthUser Account account, @Valid MeetingForm meetingForm,Meeting meeting,
-                                 Errors errors,Model model){
+    public String newMeetingPost(@AuthUser Account account, @Valid MeetingForm meetingForm, Meeting meeting,
+                                 Errors errors, Model model){
         if(errors.hasErrors()){
             model.addAttribute(account);
             return "meeting/form";
         }
 
-        Meeting newMeeting = meetingService.createNewMeeting(meeting,meetingForm, account);
+        System.out.println("account.getId() = " + account.getId());
+        Meeting newMeeting = meetingService.createNewMeeting(meetingForm,meeting,account);
+        System.out.println(newMeeting.getId()+"ㅎㅇ");
         return "redirect:/meeting/"+newMeeting.getUrl();
     }
 
@@ -58,6 +60,13 @@ public class MeetingController {
         model.addAttribute(meetingRepository.findByUrl(url));
 
         return "meeting/view";
+    }
+
+    @GetMapping("/meeting/{url}/members")
+    public String viewMeetingMembers(@AuthUser Account account, @PathVariable String url, Model model){
+        model.addAttribute(account);
+        model.addAttribute(meetingRepository.findByUrl(url));
+        return "meeting/members";
     }
 
 
