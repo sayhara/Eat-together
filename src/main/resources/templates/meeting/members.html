@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments.html :: head"></head>
+<head th:replace="fragment.html :: head"></head>
 <body class="bg-light">
 
 <div th:replace="fragment.html :: head"></div>
@@ -9,10 +9,10 @@
 <div class="container">
 
   <div th:replace="fragment.html :: meeting-info"></div>
-  <div th:replace="fragment.html :: study-Menu(studyMenu='members')"></div>
+  <div th:replace="fragment.html :: meeting-Menu(meetingMenu='members')"></div>
 
-  <div th:replace="fragments.html :: member-list(members=${meeting.manager},isManager=${true})"></div>
-  <div th:replace="fragments.html :: member-list(members=${meeting.members},isManager=${false})"></div>
+  <div th:replace="fragment.html :: member-list(members=${meeting.manager},isManager=${true})"></div>
+  <div th:replace="fragment.html :: member-list(members=${meeting.members},isManager=${false})"></div>
 
 </div>
 

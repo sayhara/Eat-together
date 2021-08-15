@@ -40,7 +40,7 @@ public class MeetingController {
     }
 
     @PostMapping("/new_meeting")
-    public String newMeetingPost(@AuthUser Account account, @Valid MeetingForm meetingForm, Meeting meeting,
+    public String newMeetingPost(@AuthUser Account account, @Valid MeetingForm meetingForm,
                                  Errors errors, Model model){
         if(errors.hasErrors()){
             model.addAttribute(account);
@@ -48,7 +48,7 @@ public class MeetingController {
         }
 
         System.out.println("account.getId() = " + account.getId());
-        Meeting newMeeting = meetingService.createNewMeeting(meetingForm,meeting,account);
+        Meeting newMeeting = meetingService.createNewMeeting(meetingForm,account);
         System.out.println(newMeeting.getId()+"ㅎㅇ");
         return "redirect:/meeting/"+newMeeting.getUrl();
     }
