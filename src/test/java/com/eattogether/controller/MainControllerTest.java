@@ -50,7 +50,7 @@ public class MainControllerTest {
     @Test
     void login_test_success() throws Exception {
         mockMvc.perform(post("/login")
-        .param("username","gyuwon12")
+        .param("nickname","gyuwon12")
         .param("password","123456789")
         .param("passwordRepeat","123456789")
         .with(csrf()))

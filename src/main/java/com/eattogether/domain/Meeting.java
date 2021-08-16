@@ -55,7 +55,7 @@ public class Meeting {
     private boolean useBanner; // 베너 사용여부
 
     //== 연관관계 메서드 ==//
-    public void setManager(Account manager){
+    public void settingManager(Account manager){
         this.manager=manager;
         manager.setMeeting(this); // Meeting에 Manager 추가
     }

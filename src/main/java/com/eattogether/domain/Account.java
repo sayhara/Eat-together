@@ -56,4 +56,7 @@ public class Account {
     @ManyToMany
     private Set<Zone> zones=new HashSet<>();
 
+    public boolean isManagerOf(Meeting meeting) {
+        return meeting.getManager().equals(this);
+    }
 }

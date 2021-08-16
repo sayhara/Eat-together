@@ -39,10 +39,10 @@
             <form class="needs-validation col-sm-6"
                   th:action="@{/sign-up}" th:object="${signUpForm}" method="post" novalidate>
                 <div class="form-group">
-                    <label for="nickname">아이디</label>
-                    <input id="nickname" type="text" th:field="*{nickname}" class="form-control"
-                           placeholder="UserName" aria-describedby="nicknameHelp" required minlength="3" maxlength="20">
-                    <small id="nicknameHelp" class="form-text text-muted">
+                    <label for="username">아이디</label>
+                    <input id="username" type="text" th:field="*{nickname}" class="form-control"
+                           placeholder="UserName" aria-describedby="usernameHelp" required minlength="3" maxlength="20">
+                    <small id="usernameHelp" class="form-text text-muted">
                         <div>아이디는 문자와 숫자로만 5자 이상 20자 이내로 입력하세요.</div>
                     </small>
                     <small class="invalid-feedback">닉네임을 입력하세요.</small>
