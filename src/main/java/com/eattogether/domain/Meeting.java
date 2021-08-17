@@ -17,11 +17,17 @@ public class Meeting {
     @Column(name="meeting_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="account_id") // 상대 테이블의 id이름
-    private Account manager;
+//    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name="account_id") // 상대 테이블의 id이름
+//    private Account manager;
+//
+//    @OneToMany(mappedBy = "meet_member") // 상대 테이블의 객체이름
+//    private Set<Account> members=new HashSet<>();
 
-    @OneToMany(mappedBy = "meet_member") // 상대 테이블의 객체이름
+    @ManyToMany
+    private Set<Account> managers = new HashSet<>();
+
+    @ManyToMany
     private Set<Account> members=new HashSet<>();
 
     @Column(unique = true)
@@ -54,17 +60,15 @@ public class Meeting {
     
     private boolean useBanner; // 베너 사용여부
 
-    //== 연관관계 메서드 ==//
-    public void settingManager(Account manager){
-        this.manager=manager;
-        manager.setMeeting(this); // Meeting에 Manager 추가
+    public void addManager(Account account){
+        this.managers.add(account);
     }
 
     public boolean isJoinable(UserAccount userAccount){
         Account account = userAccount.getAccount();
 
         return this.is_recruit() && this.is_publish()
-                &&!this.members.contains(account) && !this.manager.equals(account);
+                &&!this.members.contains(account) && !this.managers.contains(account);
     }
 
     public boolean isMember(UserAccount userAccount){
@@ -72,7 +76,28 @@ public class Meeting {
     }
 
     public boolean isManager(UserAccount userAccount){
-        return this.manager.equals(userAccount.getAccount());
+        return this.managers.contains(userAccount.getAccount());
     }
+
+    //== 연관관계 메서드 ==//
+//    public void settingManager(Account manager){
+//        this.manager=manager;
+//        manager.setMeeting(this); // Meeting에 Manager 추가
+//    }
+//
+//    public boolean isJoinable(UserAccount userAccount){
+//        Account account = userAccount.getAccount();
+//
+//        return this.is_recruit() && this.is_publish()
+//                &&!this.members.contains(account) && !this.manager.equals(account);
+//    }
+//
+//    public boolean isMember(UserAccount userAccount){
+//        return this.members.contains(userAccount.getAccount());
+//    }
+//
+//    public boolean isManager(UserAccount userAccount){
+//        return this.manager.equals(userAccount.getAccount());
+//    }
 
 }

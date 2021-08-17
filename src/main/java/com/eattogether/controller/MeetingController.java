@@ -47,9 +47,7 @@ public class MeetingController {
             return "meeting/form";
         }
 
-        System.out.println("account.getId() = " + account.getId());
         Meeting newMeeting = meetingService.createNewMeeting(meetingForm,account);
-        System.out.println(newMeeting.getId()+"ㅎㅇ");
         return "redirect:/meeting/"+newMeeting.getUrl();
     }
 
