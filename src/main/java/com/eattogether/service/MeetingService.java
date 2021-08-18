@@ -26,7 +26,7 @@ public class MeetingService {
                 .short_note(meetingForm.getShort_note())
                 .long_note(meetingForm.getLong_note())
                 .build();
-        meeting.addManager(account);
+        meeting.settingManager(account);
         Meeting saveMeeting = meetingRepository.save(meeting);
 //        saveMeeting.addManager(account);
 
