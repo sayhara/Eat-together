@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import java.nio.file.AccessDeniedException;
 
 @Service
@@ -82,7 +83,7 @@ public class MeetingService {
 
     }
 
-    public void updateMeetingDescription(Meeting meeting, MeetingDescriptionForm descriptionForm) {
+    public void updateMeetingDescription(Meeting meeting, @Valid MeetingDescriptionForm descriptionForm) {
         meeting.setShort_note(descriptionForm.getShort_note());
         meeting.setLong_note(descriptionForm.getLong_note());
         meetingRepository.save(meeting);

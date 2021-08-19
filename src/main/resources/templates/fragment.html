@@ -157,7 +157,7 @@ active" href="#" th:href="@{/settings/nickname}">계정</a>
                    th:text="${meeting.members.size()}">1</a>
                 </span>
 
-            <span sec:authorize="isAuthenticated()" th:if="${meeting.isJoinable(#authentication.principal)}"
+            <span sec:authorize="isAuthenticated()" th:if="${meeting.isMemberable(#authentication.principal)}"
                   class="btn-group" role="group">
                 <a class="btn btn-outline-warning" th:href="@{'/meeting/'+${meeting.url}+'/leave'}">
                     모임 탈퇴
@@ -165,7 +165,7 @@ active" href="#" th:href="@{/settings/nickname}">계정</a>
                 <a class="btn btn-outline-primary" th:href="@{'/meeting/'+${meeting.url}+'/members'}">1</a>
                 </span>
             <span sec:authorize="isAuthenticated()"
-                  th:if="${meeting.is_publish && !meeting.closed && meeting.isJoinable(#authentication.principal)}">
+                  th:if="${meeting.is_publish && !meeting.closed && meeting.isManagerable(#authentication.principal)}">
                 <a class="btn btn-outline-primary" th:href="@{'/meeting/'+${meeting.url}+'/new-event'}">
                     <i class="fa fa-plus"></i>모임 만들기
                 </a>

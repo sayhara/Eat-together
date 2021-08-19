@@ -89,13 +89,15 @@ public class Meeting {
     public boolean isMemberable(UserAccount userAccount){
         Account account = userAccount.getAccount();
 
-        return this.members.contains(account);
+        return this.is_recruit() && this.is_publish()
+                && this.members.contains(account);
     }
 
     public boolean isManagerable(UserAccount userAccount){
         Account account = userAccount.getAccount();
 
-        return this.manager.equals(account);
+        return this.is_recruit() && this.is_publish()
+                && this.manager.equals(account);
     }
 
 }

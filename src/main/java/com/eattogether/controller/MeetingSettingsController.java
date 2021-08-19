@@ -29,6 +29,7 @@ public class MeetingSettingsController {
     public String viewMeetingSetting(@AuthUser Account account, @PathVariable String url, Model model,
                                      @Valid MeetingDescriptionForm descriptionForm)
             throws AccessDeniedException {
+
         Meeting meeting = meetingService.getMeetingUpdate(account, url);
         Meeting meetingDescriptionForm = meetingService.createMeetingDescriptionForm(descriptionForm);
 
