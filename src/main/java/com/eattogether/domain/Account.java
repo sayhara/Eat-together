@@ -14,7 +14,7 @@ import java.util.Set;
 public class Account {
 
     @Id @GeneratedValue
-    @Column(name="account_id")
+    @Column(name = "account_id")
     private Long id;
 
     @Column(unique = true)
@@ -57,7 +57,7 @@ public class Account {
     private Set<Zone> zones=new HashSet<>();
 
     public boolean isManagerOf(Meeting meeting){
-        return meeting.getManager().equals(this);
+        return meeting.getManagers().contains(this);
     }
 
 }

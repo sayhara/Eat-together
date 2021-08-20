@@ -19,26 +19,16 @@ public class MeetingService {
 
     private final MeetingRepository meetingRepository;
 
-    public Meeting createNewMeeting(MeetingForm meetingForm, Account account){
+    public Meeting createNewMeeting(Meeting meeting, Account account){
 
-        Meeting meeting = Meeting.builder()
-                .url(meetingForm.getUrl())
-                .title(meetingForm.getTitle())
-                .short_note(meetingForm.getShort_note())
-                .long_note(meetingForm.getLong_note())
-                .build();
-        meeting.settingManager(account);
+//        Meeting meeting = Meeting.builder()
+//                .url(meetingForm.getUrl())
+//                .title(meetingForm.getTitle())
+//                .short_note(meetingForm.getShort_note())
+//                .long_note(meetingForm.getLong_note())
+//                .build();
         Meeting saveMeeting = meetingRepository.save(meeting);
-//        saveMeeting.addManager(account);
-
-//        meeting.setClosed(false);
-//        meeting.setUrl(meetingForm.getUrl());
-//        meeting.setTitle(meetingForm.getTitle());
-//        meeting.setShort_note(meetingForm.getShort_note());
-//        meeting.setLong_note(meetingForm.getLong_note());
-//        Meeting saveMeeting = meetingRepository.save(meeting);
-
-        //saveMeeting.setManager(account);
+        saveMeeting.addManager(account);
 
         return saveMeeting;
     }

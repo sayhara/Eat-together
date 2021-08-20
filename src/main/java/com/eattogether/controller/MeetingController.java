@@ -8,6 +8,7 @@ import com.eattogether.repository.MeetingRepository;
 import com.eattogether.service.MeetingService;
 import com.eattogether.validator.MeetingFormValidator;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -26,6 +27,7 @@ public class MeetingController {
     private final MeetingService meetingService;
     private final MeetingFormValidator meetingFormValidator;
     private final MeetingRepository meetingRepository;
+    private final ModelMapper modelMapper;
 
     @InitBinder("meetingForm")
     public void initBinder(WebDataBinder webDataBinder){
@@ -47,7 +49,8 @@ public class MeetingController {
             return "meeting/form";
         }
 
-        Meeting newMeeting = meetingService.createNewMeeting(meetingForm,account);
+//        Meeting newMeeting = meetingService.createNewMeeting(meetingForm, account);
+        Meeting newMeeting = meetingService.createNewMeeting(modelMapper.map(meetingForm, Meeting.class), account);
         return "redirect:/meeting/"+newMeeting.getUrl();
     }
 
