@@ -9,7 +9,7 @@
 <div class="container">
 
   <div th:replace="fragment.html :: meeting-info"></div>
-  <div th:replace="fragment.html :: meeting-Menu(meetingMenu='info')"></div>
+  <div th:replace="fragment.html :: meeting-menu(meetingMenu='info')"></div>
 
   <div class="row px-3 justify-content-center">
     <div class="col-10 pt-3" th:utext="${meeting.long_note}"></div>

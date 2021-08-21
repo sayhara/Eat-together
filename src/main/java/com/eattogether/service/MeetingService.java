@@ -19,6 +19,7 @@ public class MeetingService {
 
     private final MeetingRepository meetingRepository;
 
+    @Transactional
     public Meeting createNewMeeting(Meeting meeting, Account account){
 
 //        Meeting meeting = Meeting.builder()

@@ -44,12 +44,12 @@ public class MeetingController {
     @PostMapping("/new_meeting")
     public String newMeetingPost(@AuthUser Account account, @Valid MeetingForm meetingForm,
                                  Errors errors, Model model){
+
         if(errors.hasErrors()){
             model.addAttribute(account);
             return "meeting/form";
         }
 
-//        Meeting newMeeting = meetingService.createNewMeeting(meetingForm, account);
         Meeting newMeeting = meetingService.createNewMeeting(modelMapper.map(meetingForm, Meeting.class), account);
         return "redirect:/meeting/"+newMeeting.getUrl();
     }
