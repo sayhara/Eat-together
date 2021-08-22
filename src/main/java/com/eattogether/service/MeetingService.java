@@ -19,7 +19,6 @@ public class MeetingService {
 
     private final MeetingRepository meetingRepository;
 
-    @Transactional
     public Meeting createNewMeeting(Meeting meeting, Account account){
 
 //        Meeting meeting = Meeting.builder()
@@ -35,6 +34,7 @@ public class MeetingService {
     }
     
     public Meeting getMeeting(String url){
+
         Meeting meeting = meetingRepository.findByUrl(url);
 
         if(meeting==null){
@@ -42,6 +42,8 @@ public class MeetingService {
         }
         return meeting;
     }
+
+
 
     public Meeting getMeetingUpdate(Account account, String url)
             throws AccessDeniedException {
