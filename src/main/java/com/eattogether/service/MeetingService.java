@@ -57,28 +57,41 @@ public class MeetingService {
         return meeting;
     }
 
-    public Meeting createMeetingDescriptionForm(MeetingDescriptionForm descriptionForm) {
-
-        Meeting meeting=Meeting.builder()
-                .short_note(descriptionForm.getShort_note())
-                .long_note(descriptionForm.getLong_note())
-                .build();
-
-        Meeting saveMeeting = meetingRepository.save(meeting);
-
-        return saveMeeting;
-
-//        meeting.setShort_note(descriptionForm.getShort_note());
-//        meeting.setLong_note(descriptionForm.getLong_note());
-//        meetingRepository.save(meeting);
+//    public Meeting createMeetingDescriptionForm(MeetingDescriptionForm descriptionForm) {
 //
-//        return meeting;
-
-    }
+//        Meeting meeting=Meeting.builder()
+//                .short_note(descriptionForm.getShort_note())
+//                .long_note(descriptionForm.getLong_note())
+//                .build();
+//
+//        Meeting saveMeeting = meetingRepository.save(meeting);
+//
+//        return saveMeeting;
+//
+////        meeting.setShort_note(descriptionForm.getShort_note());
+////        meeting.setLong_note(descriptionForm.getLong_note());
+////        meetingRepository.save(meeting);
+////
+////        return meeting;
+//
+//    }
 
     public void updateMeetingDescription(Meeting meeting, @Valid MeetingDescriptionForm descriptionForm) {
         meeting.setShort_note(descriptionForm.getShort_note());
         meeting.setLong_note(descriptionForm.getLong_note());
         meetingRepository.save(meeting);
     }
+
+    public void updateMeetingImage(Meeting meeting, String image) {
+        meeting.setImage(image);
+    }
+
+    public void enableMeetingBanner(Meeting meeting) {
+        meeting.setUseBanner(true);
+    }
+
+    public void disableMeetingBanner(Meeting meeting) {
+        meeting.setUseBanner(false);
+    }
+
 }
