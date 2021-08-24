@@ -100,4 +100,32 @@ public class MeetingSettingsController {
         meetingService.disableMeetingBanner(meeting);
         return "redirect:/meeting/"+url+"/settings/banner";
     }
+
+    @GetMapping("/meeting")
+    public String viewMeeting(@AuthUser Account account,
+                              @PathVariable String url, Model model) throws AccessDeniedException {
+
+        Meeting meeting = meetingService.getMeetingUpdate(account, url);
+        model.addAttribute(account);
+        model.addAttribute(meeting);
+
+        return "meeting/settings/meeting";
+    }
+
+    @PostMapping("/meeting/publish")
+    public String publicMeeting(@AuthUser Account account, @PathVariable String url,
+                                RedirectAttributes attributes) throws AccessDeniedException {
+        Meeting meeting = meetingService.getMeetingUpdateStatus(account, url);
+        meetingService.publish(meeting);
+        attributes.addFlashAttribute("message","모임을 공개했습니다.");
+        return "redirect:/meeting/"+url+"/settings/meeting";
+    }
+
+    @PostMapping("/meeting/close")
+    public String closeMeeting(@AuthUser Account account, @PathVariable String url, RedirectAttributes attributes) throws AccessDeniedException {
+        Meeting meeting = meetingService.getMeetingUpdateStatus(account, url);
+        meetingService.close(meeting);
+        attributes.addFlashAttribute("message","모임을 종료했습니다.");
+        return "redirect:/meeting/"+url+"/settings/meeting";
+    }
 }

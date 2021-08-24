@@ -94,4 +94,30 @@ public class MeetingService {
         meeting.setUseBanner(false);
     }
 
+    public Meeting getMeetingUpdateStatus(Account account, String url) throws AccessDeniedException {
+        Meeting meeting = meetingRepository.findByUrl(url);
+        checkIfExistingMeeting(url,meeting);
+        checkIfManager(account,meeting);
+        return meeting;
+    }
+
+    private void checkIfManager(Account account, Meeting meeting) throws AccessDeniedException {
+        if(!account.isManagerOf(meeting)){
+            throw new AccessDeniedException("해당 기능 사용 불가능");
+        }
+    }
+
+    private void checkIfExistingMeeting(String url, Meeting meeting) {
+        if(meeting==null){
+            throw new IllegalArgumentException(url+"에 해당하는 모임이 없습니다.");
+        }
+    }
+
+    public void publish(Meeting meeting) {
+        meeting.publish();
+    }
+
+    public void close(Meeting meeting){
+        meeting.close();
+    }
 }

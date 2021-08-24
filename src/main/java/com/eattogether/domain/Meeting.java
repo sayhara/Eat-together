@@ -84,4 +84,21 @@ public class Meeting {
         return image!=null ? image : "/images/default_banner.jpg";
     }
 
+    public void publish() {
+        if(!this.closed && !this.is_publish()){
+            this.is_publish=true;
+            startTime=LocalDateTime.now();
+        } else{
+            throw new RuntimeException("이미 공개했거나 종료된 모임입니다.");
+        }
+    }
+
+    public void close(){
+        if(!this.closed && this.is_publish){
+            this.closed=true;
+            this.endTime=LocalDateTime.now();
+        } else{
+            throw new RuntimeException("공개하지 않았거나 종료된 모임입니다.");
+        }
+    }
 }
