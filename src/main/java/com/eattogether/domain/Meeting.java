@@ -101,4 +101,26 @@ public class Meeting {
             throw new RuntimeException("공개하지 않았거나 종료된 모임입니다.");
         }
     }
+
+    public void startRecruit() {
+        this.is_recruit=true;
+        this.recruiting_time=LocalDateTime.now();
+    }
+
+    public void stopRecruit() {
+        this.is_recruit=false;
+        this.recruiting_time=LocalDateTime.now();
+    }
+
+    public boolean isRemovable() {
+        return !this.is_publish();
+    }
+
+    public void addMember(Account account) {
+        this.getMembers().add(account);
+    }
+
+    public void removeMember(Account account) {
+        this.getMembers().remove(account);
+    }
 }

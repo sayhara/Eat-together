@@ -120,4 +120,48 @@ public class MeetingService {
     public void close(Meeting meeting){
         meeting.close();
     }
+
+    public void startRecruit(Meeting meeting) {
+        meeting.startRecruit();
+    }
+
+    public void stopRecruit(Meeting meeting) {
+        meeting.stopRecruit();
+    }
+
+    public boolean isValidUrl(String newUrl) {
+        String regex = "^[a-zA-Z0-9_-]{5,20}$";
+        if(!newUrl.matches(regex)){
+            return false;
+        }
+        return !meetingRepository.existsByUrl(newUrl);
+    }
+
+    public void updateMeetingUrl(Meeting meeting, String newUrl) {
+        meeting.setUrl(newUrl);
+    }
+
+    public boolean isValidTitle(String newTitle) {
+        return newTitle.length()<=50;
+    }
+
+    public void updateMeetingTitle(Meeting meeting, String newTitle) {
+        meeting.setTitle(newTitle);
+    }
+
+    public void remove(Meeting meeting) {
+        if(meeting.isRemovable()){
+            meetingRepository.delete(meeting);
+        } else{
+            throw new IllegalArgumentException("모임을 삭제할 수 없습니다.");
+        }
+    }
+
+    public void addMember(Meeting meeting, Account account) {
+        meeting.addMember(account);
+    }
+
+    public void removeMember(Meeting meeting, Account account) {
+        meeting.removeMember(account);
+    }
 }

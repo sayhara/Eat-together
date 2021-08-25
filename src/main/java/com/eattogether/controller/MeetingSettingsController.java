@@ -4,6 +4,7 @@ import com.eattogether.config.AuthUser;
 import com.eattogether.domain.Account;
 import com.eattogether.domain.Meeting;
 import com.eattogether.dto.MeetingDescriptionForm;
+import com.eattogether.repository.MeetingRepository;
 import com.eattogether.service.MeetingService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -23,6 +24,7 @@ public class MeetingSettingsController {
 
     private final MeetingService meetingService;
     private final ModelMapper modelMapper;
+    private final MeetingRepository meetingRepository;
 
     @GetMapping("/description")
     public String viewMeetingSetting(@AuthUser Account account, @PathVariable String url, Model model)
@@ -128,4 +130,85 @@ public class MeetingSettingsController {
         attributes.addFlashAttribute("message","모임을 종료했습니다.");
         return "redirect:/meeting/"+url+"/settings/meeting";
     }
+
+    @PostMapping("/recruit/start")
+    public String startRecruit(@AuthUser Account account, @PathVariable String url,
+                               RedirectAttributes attributes) throws AccessDeniedException {
+        Meeting meeting = meetingService.getMeetingUpdateStatus(account, url);
+
+        meetingService.startRecruit(meeting);
+        attributes.addFlashAttribute("message","인원 모집을 시작합니다.");
+        return "redirect:/meeting/"+url+"/settings/meeting";
+    }
+
+    @PostMapping("/recruit/stop")
+    public String stopRecruit(@AuthUser Account account, @PathVariable String url,
+                              RedirectAttributes attributes) throws AccessDeniedException {
+
+        Meeting meeting = meetingService.getMeetingUpdateStatus(account, url);
+
+        meetingService.stopRecruit(meeting);
+        attributes.addFlashAttribute("message","인원 모집을 종료합니다.");
+        return "redirect:/meeting/"+url+"/settings/meeting";
+    }
+
+    @PostMapping("/meeting/path")
+    public String updateMeetingPath(@AuthUser Account account, @PathVariable String url,
+                                    @RequestParam String newUrl, Model model, RedirectAttributes attributes) throws AccessDeniedException {
+
+        Meeting meeting = meetingService.getMeetingUpdateStatus(account, url);
+
+        if(!meetingService.isValidUrl(newUrl)){
+            model.addAttribute(account);
+            model.addAttribute(meeting);
+            model.addAttribute("meetingUrlError","해당 모임 경로는 사용할 수 없습니다.");
+            return "meeting/settings/meeting";
+        }
+
+        meetingService.updateMeetingUrl(meeting,newUrl);
+        attributes.addFlashAttribute("message","모임 경로를 수정했습니다.");
+        return "redirect:/meeting/"+newUrl+"/settings/meeting";
+    }
+
+    @PostMapping("/meeting/title")
+    public String updateMeetingTitle(@AuthUser Account account, @PathVariable String url,
+                                     @RequestParam String newTitle, Model model, RedirectAttributes attributes) throws AccessDeniedException {
+
+        Meeting meeting = meetingService.getMeetingUpdateStatus(account, url);
+        if(!meetingService.isValidTitle(newTitle)){
+            model.addAttribute(account);
+            model.addAttribute(meeting);
+            model.addAttribute("meetingTitleError","모임 이름을 다시 입력하세요.");
+            return "meeting/settings/meeting";
+        }
+        meetingService.updateMeetingTitle(meeting,newTitle);
+        attributes.addFlashAttribute("message","모임 이름을 수정했습니다.");
+        return "redirect:/meeting/"+url+"/settings/meeting";
+
+    }
+
+    @PostMapping("/meeting/remove")
+    public String removeMeeting(@AuthUser Account account,
+                                @PathVariable String url, Model model) throws AccessDeniedException {
+        Meeting meeting = meetingService.getMeetingUpdateStatus(account, url);
+        meetingService.remove(meeting);
+        return "redirect:/";
+    }
+
+    @GetMapping("/meeting/{url}/join")
+    public String joinMeeting(@AuthUser Account account, @PathVariable String url){
+
+        Meeting meeting = meetingRepository.findByUrl(url);
+        meetingService.addMember(meeting,account);
+        return "redirect:/meeting/"+meeting.getUrl()+"/members";
+    }
+
+    @GetMapping("/meeting/{url}/leave")
+    public String leaveMeeting(@AuthUser Account account, @PathVariable String url){
+
+        Meeting meeting = meetingRepository.findByUrl(url);
+        meetingService.removeMember(meeting,account);
+        return "redirect:/meeting/"+meeting.getUrl()+"/members";
+    }
+
 }

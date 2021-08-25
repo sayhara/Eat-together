@@ -10,7 +10,7 @@ import javax.validation.constraints.Pattern;
 public class MeetingForm {
 
     @Length(min=5,max=30)
-    @Pattern(regexp="^[a-zA-Z_0-9]{5,20}$") // 사용가능한 패턴 종류
+    @Pattern(regexp="^[a-zA-Z0-9_-]{5,20}$") // 사용가능한 패턴 종류
     private String url;
 
     @NotBlank
