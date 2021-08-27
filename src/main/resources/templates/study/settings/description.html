@@ -4,26 +4,26 @@
 <body class="bg-light">
 
 <div th:replace="fragment.html :: navigation"></div>
-<div th:replace="fragment.html :: meeting-banner"></div>
+<div th:replace="fragment.html :: study-banner"></div>
 
 <div class="container">
-  <div th:replace="fragment.html :: meeting-info"></div>
-  <div th:replace="fragment.html :: meeting-menu(meetingMenu='settings')"></div>
+  <div th:replace="fragment.html :: study-info"></div>
+  <div th:replace="fragment.html :: study-menu(studyMenu='settings')"></div>
 
   <div class="row px-3 justify-content-center">
     <div class="col-2">
-      <div th:replace="fragment.html :: meeting-settings-menu(currentMenu='description')"></div>
+      <div th:replace="fragment.html :: study-settings-menu(currentMenu='description')"></div>
     </div>
     <div class="col-8">
       <div th:replace="fragment.html :: message"></div>
-      <form class="needs-validation col-sm-10" th:action="@{'/meeting/'+${meeting.getUrl()}+'/settings/description'}"
-            th:object="${meetingDescriptionForm}" method="post" novalidate>
+      <form class="needs-validation col-sm-10" th:action="@{'/study/'+${study.url}+'/settings/description'}"
+            th:object="${studyDescriptionForm}" method="post" novalidate>
         <div class="form-group">
           <label for="short_note">짧은 소개</label>
           <textarea id="short_note" type="textarea" th:field="*{short_note}" class="form-control"
-                    placeholder="모임를 짧게 소개해 주세요." aria-describedby="short_noteHelp" maxlength="100"></textarea>
+                    placeholder="스터디를 짧게 소개해 주세요." aria-describedby="short_noteHelp" maxlength="100"></textarea>
           <small id="short_noteHelp" class="form-text text-muted">
-            100자 이내로 모임를 짧게 소개해 주세요.
+            100자 이내로 스터디를 짧게 소개해 주세요.
           </small>
           <small class="invalid-feedback">짧은 소개를 입력하세요.</small>
           <small class="form-text text-danger" th:if="${#fields.hasErrors('short_note')}" th:errors="*{short_note}"></small>
@@ -32,9 +32,9 @@
         <div class="form-group">
           <label for="long_note">상세 소개</label>
           <textarea id="long_note" type="textarea" th:field="*{long_note}" class="form-control"
-                    placeholder="모임를 자세히 소개해 주세요." aria-describedby="long_noteHelp"></textarea>
+                    placeholder="스터디를 자세히 소개해 주세요." aria-describedby="long_noteHelp"></textarea>
           <small id="long_noteHelp" class="form-text text-muted">
-            모임의 목표, 일정, 진행방식, 사용할 교재 또는 인터넷 강좌 그리고 모집중인 모임원 등 모임에 대해 자세히 적어주세요.
+            스터디의 목표, 일정, 진행방식, 사용할 교재 또는 인터넷 강좌 그리고 모집중인 스터디원 등 스터디에 대해 자세히 적어주세요.
           </small>
           <small class="invalid-feedback">상세 소개를 입력하세요.</small>
           <small class="form-text text-danger" th:if="${#fields.hasErrors('long_note')}" th:errors="*{long_note}"></small>

@@ -3,35 +3,35 @@
 <head th:replace="fragment.html :: head"></head>
 <body>
 <nav th:replace="fragment.html :: navigation"></nav>
-<div th:replace="fragment.html :: meeting-banner"></div>
+<div th:replace="fragment.html :: study-banner"></div>
 <div class="container">
-  <div th:replace="fragment.html :: meeting-info"></div>
-  <div th:replace="fragment.html :: meeting-menu(meetingMenu='settings')"></div>
+  <div th:replace="fragment.html :: study-info"></div>
+  <div th:replace="fragment.html :: study-menu(studyMenu='settings')"></div>
   <div class="row mt-3 justify-content-center">
     <div class="col-2">
-      <div th:replace="fragment.html :: meeting-settings-menu(currentMenu='image')"></div>
+      <div th:replace="fragment.html :: study-settings-menu(currentMenu='image')"></div>
     </div>
     <div class="col-8">
       <div th:replace="fragment.html :: message"></div>
       <div class="row">
         <h2 class="col-sm-12">배너 이미지 사용</h2>
       </div>
-      <form th:if="${!meeting.useBanner}" action="#" th:action="@{'/meeting/' + ${meeting.url} +
+      <form th:if="${!study.useBanner}" action="#" th:action="@{'/study/' + ${study.url} +
                           '/settings/banner/enable'}" method="post" novalidate>
         <div class="alert alert-primary" role="alert">
-          모임 메뉴에서 모임 배너 이미지를 사용합니다.
-          모임 배너 이미지를 아직 설정하지 않았다면, 기본 배너 이미지를 사용합니다.
+          스터디 메뉴에서 스터디 배너 이미지를 사용합니다.
+          스터디 배너 이미지를 아직 설정하지 않았다면, 기본 배너 이미지를 사용합니다.
         </div>
         <div class="form-group">
           <button class="btn btn-outline-primary btn-block"
                   type="submit" aria-describedby="submitHelp">배너 이미지 사용하기</button>
         </div>
       </form>
-      <form th:if="${meeting.useBanner}" action="#" th:action="@{'/meeting/' + ${meeting.url} +
+      <form th:if="${study.useBanner}" action="#" th:action="@{'/study/' + ${study.url} +
                           '/settings/banner/disable'}" method="post" novalidate>
         <div class="alert alert-info" role="alert">
-          모임 메뉴에서 모임 배너 이미지를 사용하지 않습니다.
-          모임 목록에서는 배너 이미지를 사용합니다.
+          스터디 메뉴에서 스터디 배너 이미지를 사용하지 않습니다.
+          스터디 목록에서는 배너 이미지를 사용합니다.
         </div>
         <div class="form-group">
           <button class="btn btn-outline-primary btn-block"
@@ -42,29 +42,29 @@
       <div class="row">
         <h2 class="col-sm-12">배너 이미지 변경</h2>
       </div>
-      <form id="imageForm" action="#" th:action="@{'/meeting/' + ${meeting.url} +
+      <form id="imageForm" action="#" th:action="@{'/study/' + ${study.url} +
                                   '/settings/banner'}" method="post" novalidate>
         <div class="form-group">
-          <input id="meetingImage" type="hidden" name="image" class="form-control" />
+          <input id="studyImage" type="hidden" name="image" class="form-control" />
         </div>
       </form>
       <div class="card text-center">
-        <div id="current-meeting-image" class="mt-3">
-          <img class="rounded" th:src="${meeting.image}" width="640" alt="name" th:alt="${meeting.title}"/>
+        <div id="current-study-image" class="mt-3">
+          <img class="rounded" th:src="${study.image}" width="640" alt="name" th:alt="${study.title}"/>
         </div>
-        <div id="new-meeting-image" class="mt-3"></div>
+        <div id="new-study-image" class="mt-3"></div>
         <div class="card-body">
           <div class="custom-file">
-            <input type="file" class="custom-file-input" id="meeting-image-file">
-            <label class="custom-file-label" for="meeting-image-file">모임 이미지 변경</label>
+            <input type="file" class="custom-file-input" id="study-image-file">
+            <label class="custom-file-label" for="study-image-file">스터디 이미지 변경</label>
           </div>
-          <div id="new-meeting-image-control" class="mt-3">
+          <div id="new-study-image-control" class="mt-3">
             <button class="btn btn-outline-primary btn-block" id="cut-button">자르기</button>
             <button class="btn btn-outline-success btn-block" id="confirm-button">확인</button>
             <button class="btn btn-primary btn-block" id="save-button">저장</button>
             <button class="btn btn-outline-warning btn-block" id="reset-button">취소</button>
           </div>
-          <div id="cropped-new-meeting-image" class="mt-3"></div>
+          <div id="cropped-new-study-image" class="mt-3"></div>
         </div>
       </div>
     </div>
@@ -81,18 +81,18 @@
     let $resetBtn = $("#reset-button");
     let $cutBtn = $("#cut-button");
     let $saveBtn = $("#save-button");
-    let $newmeetingImage = $("#new-meeting-image");
-    let $currentmeetingImage = $("#current-meeting-image");
-    let $resultImage = $("#cropped-new-meeting-image");
-    let $meetingImage = $("#meetingImage");
+    let $newstudyImage = $("#new-study-image");
+    let $currentstudyImage = $("#current-study-image");
+    let $resultImage = $("#cropped-new-study-image");
+    let $studyImage = $("#studyImage");
 
-    $newmeetingImage.hide();
+    $newstudyImage.hide();
     $cutBtn.hide();
     $resetBtn.hide();
     $confirmBtn.hide();
     $saveBtn.hide();
 
-    $("#meeting-image-file").change(function(e) {
+    $("#study-image-file").change(function(e) {
       if (e.target.files.length === 1) {
         const reader = new FileReader();
         reader.onload = e => {
@@ -103,13 +103,13 @@
             }
 
             let img = document.createElement("img");
-            img.id = 'new-meeting';
+            img.id = 'new-study';
             img.src = e.target.result;
             img.width=250;
 
-            $newmeetingImage.html(img);
-            $newmeetingImage.show();
-            $currentmeetingImage.hide();
+            $newstudyImage.html(img);
+            $newstudyImage.show();
+            $currentstudyImage.hide();
 
             let $newImage = $(img);
             $newImage.cropper({aspectRatio: 1});
@@ -126,21 +126,21 @@
     });
 
     $resetBtn.click(function() {
-      $currentmeetingImage.show();
-      $newmeetingImage.hide();
+      $currentstudyImage.show();
+      $newstudyImage.hide();
       $resultImage.hide();
       $resetBtn.hide();
       $cutBtn.hide();
       $confirmBtn.hide();
       $saveBtn.hide();
-      $meetingImage.val('');
+      $studyImage.val('');
     });
 
     $cutBtn.click(function () {
       let dataUrl = cropper.getCroppedCanvas().toDataURL();
 
       let newImage = document.createElement("img");
-      newImage.id = "cropped-new-meeting-image";
+      newImage.id = "cropped-new-study-image";
       newImage.src = dataUrl;
       newImage.width = 125;
       $resultImage.html(newImage);
@@ -148,10 +148,10 @@
       $confirmBtn.show();
 
       $confirmBtn.click(function () {
-        $newmeetingImage.html(newImage);
+        $newstudyImage.html(newImage);
         $cutBtn.hide();
         $confirmBtn.hide();
-        $meetingImage.val(dataUrl);
+        $studyImage.val(dataUrl);
         $saveBtn.show();
       });
     });

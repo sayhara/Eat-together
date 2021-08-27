@@ -1,7 +1,7 @@
 package com.eattogether.validator;
 
-import com.eattogether.dto.MeetingForm;
-import com.eattogether.repository.MeetingRepository;
+import com.eattogether.dto.StudyForm;
+import com.eattogether.repository.StudyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -9,23 +9,23 @@ import org.springframework.validation.Validator;
 
 @Component
 @RequiredArgsConstructor
-public class MeetingFormValidator implements Validator {
+public class StudyFormValidator implements Validator {
 
-    private final MeetingRepository meetingRepository;
+    private final StudyRepository studyRepository;
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return MeetingForm.class.isAssignableFrom(clazz);
+        return StudyForm.class.isAssignableFrom(clazz);
     }
 
     @Override
     public void validate(Object target, Errors errors) {
 
-        MeetingForm meetingForm=(MeetingForm) target;
+        StudyForm studyForm =(StudyForm) target;
 
-        if(meetingRepository.existsByUrl(meetingForm.getUrl())){
+        if(studyRepository.existsByUrl(studyForm.getUrl())){
             errors.rejectValue("url","wrong.url",
-                    "해당 모임경로가 이미 사용중입니다.");
+                    "해당 스터디의 경로가 이미 사용중입니다.");
         }
 
     }

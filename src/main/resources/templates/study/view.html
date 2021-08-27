@@ -4,15 +4,15 @@
 <body class="bg-light">
 
 <div th:replace="fragment.html :: navigation"></div>
-<div th:replace="fragment.html :: meeting-banner"></div>
+<div th:replace="fragment.html :: study-banner"></div>
 
 <div class="container">
 
-  <div th:replace="fragment.html :: meeting-info"></div>
-  <div th:replace="fragment.html :: meeting-menu(meetingMenu='info')"></div>
+  <div th:replace="fragment.html :: study-info"></div>
+  <div th:replace="fragment.html :: study-menu(studyMenu='info')"></div>
 
   <div class="row px-3 justify-content-center">
-    <div class="col-10 pt-3" th:utext="${meeting.long_note}"></div>
+    <div class="col-10 pt-3" th:utext="${study.long_note}"></div>
   </div>
 
 </div>

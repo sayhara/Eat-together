@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @NoArgsConstructor
-public class MeetingDescriptionForm {
+public class StudyDescriptionForm {
 
     @Length(max=100)
     private String short_note;

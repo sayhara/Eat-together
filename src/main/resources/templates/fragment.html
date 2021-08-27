@@ -37,7 +37,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <form th:action="@{/search/meeting}" class="form-inline" method="get">
+                <form th:action="@{/search/study}" class="form-inline" method="get">
                     <input class="form-control mr-sm-2" name="keyword" type="search"
                            placeholder=" 주변 찾기 ">
                 </form>
@@ -119,69 +119,70 @@ active" href="#" th:href="@{/settings/zones}">활동 지역</a>
 active" href="#" th:href="@{/settings/nickname}">계정</a>
 </div>
 
-<div th:fragment="meeting-banner" th:if="${meeting.useBanner}" class="row" id="meeting-logo">
-    <img th:src="${meeting.image}"/>
+<div th:fragment="study-banner" th:if="${study.useBanner}" class="row" id="study-logo">
+    <img th:src="${study.image}"/>
 </div>
 
-<div th:fragment="meeting-info">
+<div th:fragment="study-info">
     <div class="row pt-4 text-left justify-content-center bg-light">
         <div class="col-6">
-            <a href="#" class="text-decoration-none" th:href="@{'/meeting/'+${meeting.url}}">
-                <span class="h2" th:text="${meeting.title}">모임 이름</span>
+            <a href="#" class="text-decoration-none" th:href="@{'/study/'+${study.url}}">
+                <span class="h2" th:text="${study.title}">스터디 이름</span>
             </a>
         </div>
 
         <div class="col-4 text-right justify-content-end">
-                <span th:if="${!meeting.is_publish}"
+                <span th:if="${!study.is_publish}"
                       class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="bottom"
-                      title="모임 공개 준비중">
+                      title="스터디 공개 준비중">
                     <button class="btn btn-primary btn-sm" style="pointer-events:none;" type="button" disabled>DRAFT</button>
                 </span>
-            <span th:if="${meeting.closed}"
+            <span th:if="${study.closed}"
                   class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="bottom"
-                  title="모임 종료함">
+                  title="스터디 종료함">
                     <button class="btn btn-primary btn-sm" style="pointer-events:none;" type="button" disabled>CLOSED</button>
                 </span>
-            <span th:if="${!meeting.is_recruit}"
+            <span th:if="${!study.is_recruit}"
                   class="d-inline-block ml-1" tabindex="0" data-toggle="tooltip" data-placement="bottom"
                   title="팀원 모집중 아님">
                     <button class="btn btn-primary btn-sm" style="pointer-events:none;" type="button" disabled>OFF</button>
                 </span>
 
-            <span sec:authorize="isAuthenticated()"
+            <span sec:authorize="isAuthenticated()" th:if="${study.isJoinable(#authentication.principal)}"
                   class="btn-group" role="group" aria-label="Basic example">
-                <a class="btn btn-primary" th:href="@{'/meeting/'+${meeting.url}+'/join'}">
-                    모임 가입
+                <a class="btn btn-primary" th:href="@{'/study/'+${study.url}+'/join'}">
+                    스터디 가입
                 </a>
-                <a class="btn btn-outline-primary" th:href="@{'/meeting/'+${meeting.url}+'/members'}">1</a>
+                <a class="btn btn-outline-primary" th:href="@{'/study/'+${study.url}+'/members'}"
+                   th:text="${study.members.size()}">1</a>
                 </span>
 
             <span sec:authorize="isAuthenticated()"
-                  th:if="${!meeting.closed}" class="btn-group" role="group">
-                <a class="btn btn-outline-warning" th:href="@{'/meeting/'+${meeting.url}+'/leave'}">
-                     모임 탈퇴
+                  th:if="${!study.closed && study.isMember(#authentication.principal)}" class="btn-group" role="group">
+                <a class="btn btn-outline-warning" th:href="@{'/study/'+${study.url}+'/leave'}">
+                     스터디 탈퇴
                 </a>
-                <a class="btn btn-outline-primary" th:href="@{'/meeting/'+${meeting.url}+'/members'}"
-                   >1</a>
+                <a class="btn btn-outline-primary" th:href="@{'/study/'+${study.url}+'/members'}"
+                   th:text="${study.members.size()}">1</a>
                 </span>
             <span sec:authorize="isAuthenticated()"
-                  th:if="${meeting.is_publish && !meeting.closed}">
-                <a class="btn btn-outline-primary" th:href="@{'/meeting/'+${meeting.url}+'/new-event'}">
+                  th:if="${study.is_publish && !study.closed && study.isManager(#authentication.principal)}">
+                <a class="btn btn-outline-primary" th:href="@{'/study/'+${study.url}+'/new-event'}">
                     <i class="fa fa-plus"></i>모임 만들기
                 </a>
-                </span>
+            </span>
         </div>
     </div>
 
     <div class="row justify-content-center bg-light">
         <div class="col-10">
-            <p class="lead" th:text="${meeting.short_note}"></p>
+            <p class="lead" th:text="${study.short_note}"></p>
         </div>
     </div>
     <div class="row justify-content-center bg-light">
         <div class="col-10">
             <p>
-                <span th:each="zone:${meeting.zones}" class="font-weight-light text-monospace badge badge-primary mr-3">
+                <span th:each="zone:${study.zones}" class="font-weight-light text-monospace badge badge-primary mr-3">
                         <a th:href="@{'/search/zone/'+${zone.id}}" class="text-decoration-none text-white">
                             <i class="fa fa-globe"></i><span th:text="${zone.part2}">City</span>
                         </a>
@@ -191,19 +192,19 @@ active" href="#" th:href="@{/settings/nickname}">계정</a>
     </div>
 </div>
 
-    <div th:fragment="meeting-menu (meetingMenu)" class="row px-3 justify-content-center bg-light">
+    <div th:fragment="study-menu (studyMenu)" class="row px-3 justify-content-center bg-light">
         <nav class="col-10 nav nav-tabs">
-            <a class="nav-item nav-link" href="#" th:classappend="${meetingMenu=='info'}?active" th:href="@{'/meeting/'+${meeting.url}}">
+            <a class="nav-item nav-link" href="#" th:classappend="${studyMenu=='info'}?active" th:href="@{'/study/'+${study.url}}">
                 <i class="fa fa-info-circle"></i>소개
             </a>
-            <a class="nav-item nav-link" href="#" th:classappend="${meetingMenu=='members'}?active" th:href="@{'/meeting/'+${meeting.url} +'/members'}">
+            <a class="nav-item nav-link" href="#" th:classappend="${studyMenu=='members'}?active" th:href="@{'/study/'+${study.url} +'/members'}">
                 <i class="fa fa-user"></i>구성원
             </a>
-            <a class="nav-item nav-link" href="#" th:classappend="${meetingMenu=='events'}?active" th:href="@{'/meeting/'+${meeting.url} +'/events'}">
+            <a class="nav-item nav-link" href="#" th:classappend="${studyMenu=='events'}?active" th:href="@{'/study/'+${study.url} +'/events'}">
                 <i class="fa fa-calendar"></i>모임
             </a>
-            <a sec:authorize="isAuthenticated()"
-               class="nav-item nav-link" th:href="@{'/meeting/' +${meeting.url} +'/settings/description'}">
+            <a sec:authorize="isAuthenticated()" th:if="${study.isManager(#authentication.principal)}"
+               class="nav-item nav-link" th:href="@{'/study/' +${study.url} +'/settings/description'}">
                 <i class="fa fa-cog"></i>설정
             </a>
         </nav>
@@ -225,17 +226,17 @@ active" href="#" th:href="@{/settings/nickname}">계정</a>
     </ul>
 </div>
 
-<div th:fragment="meeting-settings-menu(currentMenu)" class="list-group">
+<div th:fragment="study-settings-menu(currentMenu)" class="list-group">
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu=='description'}? active"
-       href="#" th:href="@{'/meeting/'+${meeting.url}+'/settings/description'}">소개</a>
+       href="#" th:href="@{'/study/'+${study.url}+'/settings/description'}">소개</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu=='image'}? active"
-       href="#" th:href="@{'/meeting/'+${meeting.url}+'/settings/banner'}">배너 이미지</a>
+       href="#" th:href="@{'/study/'+${study.url}+'/settings/banner'}">배너 이미지</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu=='tags'}? active"
-       href="#" th:href="@{'/meeting/'+${meeting.url}+'/settings/tags'}">모임 주제</a>
+       href="#" th:href="@{'/study/'+${study.url}+'/settings/tags'}">스터디 주제</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu=='zones'}? active"
-       href="#" th:href="@{'/meeting/'+${meeting.url}+'/settings/zones'}">활동 지역</a>
+       href="#" th:href="@{'/study/'+${study.url}+'/settings/zones'}">활동 지역</a>
     <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu=='description'}? active"
-       href="#" th:href="@{'/meeting/'+${meeting.url}+'/settings/meeting'}">모임</a>
+       href="#" th:href="@{'/study/'+${study.url}+'/settings/study'}">모임</a>
 </div>
 
 <div th:fragment="editor-script">
@@ -245,7 +246,7 @@ active" href="#" th:href="@{/settings/nickname}">계정</a>
         $(function(){
             $('#long_note').summernote({
                 fontNames:['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Noto Sans KR', 'Merriweather'],
-                placeholder:'모임의 목표, 일정, 진행방식 등
+                placeholder:'스터디 목표, 일정, 진행방식 등
                 tabsize:2,
                 height:300
             });

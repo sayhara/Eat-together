@@ -11,10 +11,10 @@ import java.util.Set;
 @Entity
 @Getter @Setter @EqualsAndHashCode(of="id")
 @Builder @AllArgsConstructor @NoArgsConstructor
-public class Meeting {
+public class Study {
 
     @Id @GeneratedValue
-    @Column(name = "meeting_id")
+    @Column(name = "study_id")
     private Long id;
 
     @ManyToMany
@@ -69,7 +69,7 @@ public class Meeting {
         Account account = userAccount.getAccount();
 
         return this.is_recruit() && this.is_publish()
-                &&!this.members.contains(account) && !this.managers.contains(account);
+                && !this.managers.contains(userAccount.getAccount());
     }
 
     public boolean isMember(UserAccount userAccount){
@@ -89,7 +89,7 @@ public class Meeting {
             this.is_publish=true;
             startTime=LocalDateTime.now();
         } else{
-            throw new RuntimeException("이미 공개했거나 종료된 모임입니다.");
+            throw new RuntimeException("이미 공개했거나 종료된 스터디입니다.");
         }
     }
 
@@ -98,7 +98,7 @@ public class Meeting {
             this.closed=true;
             this.endTime=LocalDateTime.now();
         } else{
-            throw new RuntimeException("공개하지 않았거나 종료된 모임입니다.");
+            throw new RuntimeException("공개하지 않았거나 종료된 스터디입니다.");
         }
     }
 

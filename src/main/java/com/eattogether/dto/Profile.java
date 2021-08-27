@@ -4,6 +4,10 @@ import com.eattogether.domain.Account;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Basic;
+import javax.persistence.FetchType;
+import javax.persistence.Lob;
+
 @Data
 @NoArgsConstructor
 public class Profile {
@@ -16,6 +20,7 @@ public class Profile {
 
     private String location; // 지역
 
+    @Lob @Basic(fetch = FetchType.EAGER)
     private String profileImage; // 프로필 이미지
 
     public Profile(Account account) {

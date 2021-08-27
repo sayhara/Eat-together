@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @Data
-public class MeetingForm {
+public class StudyForm {
 
     @Length(min=5,max=30)
     @Pattern(regexp="^[a-zA-Z0-9_-]{5,20}$") // 사용가능한 패턴 종류
