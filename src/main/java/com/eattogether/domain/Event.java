@@ -1,5 +1,6 @@
 package com.eattogether.domain;
 
+import com.eattogether.controller.UserAccount;
 import com.eattogether.dto.EventType;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -48,4 +49,37 @@ public class Event {
 
     @Enumerated(EnumType.STRING)
     private EventType eventType; // 이벤트 타입은 2개
+
+    private boolean isNotClosed(){
+        return this.endEnrollmentDateTime.isAfter(LocalDateTime.now());
+    }
+
+    private boolean isAlreadyEnrolled(UserAccount userAccount){
+        Account account = userAccount.getAccount();
+        for (Enrollment e : enrollments) {
+            if(e.getAccount().equals(account)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isEnrollableFor(UserAccount userAccount){
+        return isNotClosed() && !isAlreadyEnrolled(userAccount);
+    }
+
+    public boolean isDisenrollableFor(UserAccount userAccount){
+        return isNotClosed() && isAlreadyEnrolled(userAccount);
+    }
+
+    public boolean isAttended(UserAccount userAccount){
+        Account account = userAccount.getAccount();
+        for (Enrollment e : enrollments) {
+            if(e.getAccount().equals(account) &&
+                e.isAttended()){
+                return true;
+            }
+        }
+        return false;
+    }
 }
