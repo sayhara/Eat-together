@@ -9,37 +9,39 @@
   <div class="py-5 text-center">
     <h2>스터디 개설</h2>
   </div>
+
   <div class="row justify-content-center">
     <form class="needs-validation col-sm-10" action="#"
           th:action="@{/new-study}" th:object="${studyForm}" method="post" novalidate>
       <div class="form-group">
-        <label for="url">스터디 URL</label>
-        <input id="url" type="text" th:field="*{url}" class="form-control"
-               placeholder="www.naver.com" aria-describedby="urlHelp" min="5" max="30">
-        <small id="urlHelp" class="form-text text-muted">
-          공백없이 문자, 숫자, 대시(-)와 언더바(_)만 5자 이상 30자 이내로 입력하세요. 스터디 홈 주소에 사용합니다.
+        <label for="path">스터디 URL</label>
+        <input id="path" type="text" th:field="*{url}" class="form-control"
+               placeholder="예) study-path" aria-describedby="pathHelp" required min="2" max="20">
+        <small id="pathHelp" class="form-text text-muted">
+          공백없이 문자, 숫자, 대시(-)와 언더바(_)만 2자 이상 20자 이내로 입력하세요. 스터디 홈 주소에 사용합니다,
+          예) /study<b>study-url</b>
         </small>
-        <small class="invalid-feedback">스터디의 경로를 입력하세요.</small>
-        <small class="form-text text-danger" th:if="${#fields.hasErrors('url')}" th:errors="*{url}">url Error</small>
+        <small class="invalid-feedback">스터디 경로를 입력하세요.</small>
+        <small class="form-text text-danger" th:if="${#fields.hasErrors('url')}" th:errors="*{url}">Url Error</small>
       </div>
 
       <div class="form-group">
-        <label for="title">스터디명</label>
+        <label for="title">스터디 이름</label>
         <input id="title" type="text" th:field="*{title}" class="form-control"
-               placeholder="스터디명" aria-describedby="titleHelp" required>
+               placeholder="스터디 이름" aria-describedby="titleHelp" required max="50">
         <small id="titleHelp" class="form-text text-muted">
-          스터디명을 입력하세요.
+          스터디 이름을 50자 이내로 입력하세요.
         </small>
         <small class="invalid-feedback">스터디 이름을 입력하세요.</small>
         <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title Error</small>
       </div>
 
       <div class="form-group">
-        <label for="short_note">짧은 소개</label>
-        <textarea id="short_note" type="textarea" th:field="*{short_note}" class="form-control"
-                  placeholder="스터디를 짧게 소개해 주세요." aria-describedby="short_noteHelp" required maxlength="50"></textarea>
+        <label for="shortDescription">짧은 소개</label>
+        <textarea id="shortDescription" type="textarea" th:field="*{short_note}" class="form-control"
+                  placeholder="스터디를 짧게 소개해 주세요." aria-describedby="short_noteHelp" required maxlength="100"></textarea>
         <small id="short_noteHelp" class="form-text text-muted">
-          50자 이내로 스터디를 짧게 소개해 주세요.
+          100자 이내로 스터디를 짧게 소개해 주세요.
         </small>
         <small class="invalid-feedback">짧은 소개를 입력하세요.</small>
         <small class="form-text text-danger" th:if="${#fields.hasErrors('short_note')}" th:errors="*{short_note}"></small>
@@ -47,11 +49,13 @@
 
       <div class="form-group">
         <label for="long_note">상세 소개</label>
-        <textarea id="long_note" type="textarea" th:field="*{long_note}" class="editor form-control"
-                  placeholder="스터디를 자세히 소개해 주세요." aria-describedby="long_noteHelp"></textarea>
+        <textarea id="long_note" type="textarea" th:field="*{long_note}" class="form-control"
+                  placeholder="스터디를 자세히 소개해 주세요." aria-describedby="long_noteHelp" required></textarea>
         <small id="long_noteHelp" class="form-text text-muted">
-          스터디의 주된 목적 및 시간과 장소를 정확하게 입력해 주세요.
+          스터디의 목표, 일정, 진행방식, 사용할 교재 또는 인터넷 강좌 그리고 모집중인 스터디원 등 스터디에 대해 자세히 적어주세요.
         </small>
+        <small class="invalid-feedback">상세 소개를 입력하세요.</small>
+        <small class="form-text text-danger" th:if="${#fields.hasErrors('long_note')}" th:errors="*{long_note}"></small>
       </div>
 
       <div class="form-group">
@@ -61,19 +65,8 @@
 
     </form>
   </div>
-</div>
 
 <script th:replace="fragment.html :: validation"></script>
-<script src="/node_modules/summernote/dist/summernote-bs4.js"></script>
-<script type="application/javascript">
-  $(function(){
-    $('#long_note').summernote({
-      fontNames:['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Noto Sans KR', 'Merriweather'],
-      placeholder:'스터디의 주된 목적 및 시간과 장소를 정확하게 입력해 주세요.',
-      tabsize:2,
-      height:300
-    });
-  });
-</script>
+<script th:replace="fragment.html :: editor-script"></script>
 </body>
 </html>

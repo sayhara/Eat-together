@@ -2,15 +2,15 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="fragments.html :: head"></head>
+<head th:replace="fragment.html :: head"></head>
 <body>
-<nav th:replace="fragments.html :: main-nav"></nav>
-<div th:replace="fragments.html :: study-banner"></div>
+<nav th:replace="fragment.html :: navigation"></nav>
+<div th:replace="fragment.html :: study-banner"></div>
 <div class="container">
     <div class="row py-4 text-left justify-content-center bg-light">
         <div class="col-6">
                 <span class="h2">
-                <a href="#" class="text-decoration-none" th:href="@{'/study/' + ${study.path}}">
+                <a href="#" class="text-decoration-none" th:href="@{'/study/' + ${study.url}}">
                     <span th:text="${study.title}">스터디 이름</span>
                 </a> / </span>
             <span class="h2" th:text="${event.title}"></span>
@@ -47,7 +47,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                        <form th:action="@{'/study/' + ${study.path} +
+                        <form th:action="@{'/study/' + ${study.url} +
 '/events/' + ${event.id} + '/disenroll'}" method="post">
                             <button class="btn btn-primary"
                                     type="submit" aria-describedby="submitHelp">확인</button>
@@ -72,7 +72,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                        <form th:action="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/enroll'}" method="post">
+                        <form th:action="@{'/study/' + ${study.url} + '/events/' + ${event.id} + '/enroll'}" method="post">
                             <button class="btn btn-primary" type="submit" aria-describedby="submitHelp">확인</button>
                         </form>
                     </div>
@@ -125,18 +125,18 @@
                         </td>
                         <td th:if="${study.isManager(#authentication.principal)}">
                             <a th:if="${event.canAccept(enroll)}" href="#" class="text-decoration-none"
-                               th:href="@{'/study/' + ${study.path} + '/events/' + ${event.id} +
+                               th:href="@{'/study/' + ${study.url} + '/events/' + ${event.id} +
 '/enrollments/' + ${enroll.id} + '/accept'}" >신청 수락</a>
                             <a th:if="${event.canReject(enroll)}" href="#" class="text-decoration-none"
-                               th:href="@{'/study/' + ${study.path} + '/events/' +
+                               th:href="@{'/study/' + ${study.url} + '/events/' +
 ${event.id} + '/enrollments/' + ${enroll.id} + '/reject'}">취소</a>
                         </td>
                         <td th:if="${study.isManager(#authentication.principal)}">
                             <a th:if="${enroll.accepted && !enroll.attended}" href="#" class="text-decoration-none"
-                               th:href="@{'/study/' + ${study.path} + '/events/' +
+                               th:href="@{'/study/' + ${study.url} + '/events/' +
 ${event.id} + '/enrollments/' + ${enroll.id} + '/checkin'}">체크인</a>
                             <a th:if="${enroll.accepted && enroll.attended}" href="#" class="text-decoration-none"
-                               th:href="@{'/study/' + ${study.path} + '/events/' +
+                               th:href="@{'/study/' + ${study.url} + '/events/' +
 ${event.id} + '/enrollments/' + ${enroll.id} + '/cancel-checkin'}">체크인 취소</a>
                         </td>
                     </tr>
@@ -189,7 +189,7 @@ T(com.eattogether.dto.EventType).CONFIRMATIVE}">관리자 확인</span>
             <dt th:if="${study.isManager(#authentication.principal)}" class="font-weight-light">모임 관리</dt>
             <dd th:if="${study.isManager(#authentication.principal)}">
                 <a class="btn btn-outline-primary btn-sm my-1"
-                   th:href="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/edit'}" >
+                   th:href="@{'/study/' + ${study.url} + '/events/' + ${event.id} + '/edit'}" >
                     모임 수정
                 </a> <br/>
                 <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#cancel">
@@ -214,8 +214,8 @@ T(com.eattogether.dto.EventType).CONFIRMATIVE}">관리자 확인</span>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                        <form th:action="@{'/study/' + ${study.path} + '/events/'
-+ ${event.id}}" th:method="delete">
+                        <form th:action="@{'/study/' + ${study.url} + '/events/'
++ ${event.id}}">
                             <button class="btn btn-primary" type="submit"
                                     aria-describedby="submitHelp">확인</button>
                         </form>
@@ -224,7 +224,6 @@ T(com.eattogether.dto.EventType).CONFIRMATIVE}">관리자 확인</span>
             </div>
         </div>
     </div>
-    <div th:replace="fragments.html :: footer"></div>
 </div>
 <script src="/node_modules/moment/min/moment-with-locales.min.js"></script>
 <script type="application/javascript">

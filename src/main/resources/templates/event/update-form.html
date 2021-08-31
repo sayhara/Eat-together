@@ -4,8 +4,10 @@
 <body class="bg-light">
 <nav th:replace="fragment.html::navigation"></nav>
 <div th:replace="fragment.html::study-banner"></div>
-<div th:replace="fragment.html::event-form(mode='new',
-                        action='/study/'+${study.url}+'/new-event/')"></div>
+<div class="container">
+  <div th:replace="fragment.html ::event-form (mode='edit',
+                        action='/study/'+${study.url}+'/events/'+${event.id}+'/edit')"></div>
+</div>
 <script th:replace="fragment.html::validation"></script>
 <script th:replace="fragment.html::editor-script"></script>
 </body>

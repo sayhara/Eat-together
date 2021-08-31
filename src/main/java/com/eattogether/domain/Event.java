@@ -82,4 +82,15 @@ public class Event {
         }
         return false;
     }
+
+    public int numberOfRemainSpots(){
+        return (int) (limitOfEnrollments-enrollments.
+                        stream().filter(Enrollment::isAccepted).count());
+    }
+
+    public long getNumberOfAcceptedEnrollments(){
+        return enrollments.stream().filter(Enrollment::isAccepted).count();
+    }
+
+
 }
