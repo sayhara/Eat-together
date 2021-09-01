@@ -2,9 +2,11 @@ package com.eattogether.controller;
 
 import com.eattogether.config.AuthUser;
 import com.eattogether.domain.Account;
+import com.eattogether.domain.Enrollment;
 import com.eattogether.domain.Event;
 import com.eattogether.domain.Study;
 import com.eattogether.dto.EventForm;
+import com.eattogether.repository.EnrollmentRepository;
 import com.eattogether.repository.EventRepository;
 import com.eattogether.service.EventService;
 import com.eattogether.service.StudyService;
@@ -33,6 +35,7 @@ public class EventController {
     private final EventService eventService;
     private final ModelMapper modelMapper;
     private final EventRepository eventRepository;
+    private final EnrollmentRepository enrollmentRepository;
 
     @GetMapping("/new-event")
     public String newEventForm(@AuthUser Account account,
@@ -159,4 +162,43 @@ public class EventController {
         return "redirect:/study/"+study.getUrl()+"/events/"+id;
     }
 
+    @GetMapping("/events/{eventId}/enrollments/{enrollmentId}/accept")
+    public String acceptEnrollment(@AuthUser Account account, @PathVariable String url,
+                                   @PathVariable("eventId") Event event,
+                                   @PathVariable("enrollmentId") Enrollment enrollment)
+            throws AccessDeniedException {
+        Study study = studyService.getStudyUpdate(account, url);
+        eventService.acceptEnrollment(event,enrollment);
+        return "redirect:/study/"+study.getUrl()+"/events/"+event.getId();
+    }
+
+    @GetMapping("/events/{eventId}/enrollments/{enrollmentId}/reject")
+    public String rejectEnrollment(@AuthUser Account account, @PathVariable String url,
+                                   @PathVariable("eventId") Event event,
+                                   @PathVariable("enrollmentId") Enrollment enrollment)
+            throws AccessDeniedException {
+        Study study = studyService.getStudyUpdate(account, url);
+        eventService.rejectEnrollment(event,enrollment);
+        return "redirect:/study/"+study.getUrl()+"/events/"+event.getId();
+    }
+
+    @GetMapping("/events/{eventId}/enrollments/{enrollmentId}/checkin")
+    public String checkInEnrollment(@AuthUser Account account, @PathVariable String url,
+                                    @PathVariable("eventId") Event event,
+                                    @PathVariable("enrollmentId") Enrollment enrollment)
+            throws AccessDeniedException {
+        Study study = studyService.getStudyUpdate(account, url);
+        eventService.checkInEnrollment(enrollment);
+        return "redirect:/study/" + study.getUrl() + "/events/" + event.getId();
+    }
+
+    @GetMapping("/events/{eventId}/enrollments/{enrollmentId}/cancel-checkin")
+    public String cancelCheckInEnrollment(@AuthUser Account account, @PathVariable String url,
+                                          @PathVariable("eventId") Event event,
+                                          @PathVariable("enrollmentId") Enrollment enrollment)
+            throws AccessDeniedException {
+        Study study = studyService.getStudyUpdate(account, url);
+        eventService.cancelCheckInEnrollment(enrollment);
+        return "redirect:/study/" + study.getUrl() + "/events/" + event.getId();
+    }
 }
