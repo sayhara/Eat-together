@@ -92,5 +92,50 @@ public class Event {
         return enrollments.stream().filter(Enrollment::isAccepted).count();
     }
 
+    public boolean canAccept(Enrollment enrollment){
+        return this.eventType==EventType.CONFIRMATIVE
+                && this.enrollments.contains(enrollment)
+                && !enrollment.isAttended()
+                && !enrollment.isAccepted();
+    }
 
+    public boolean canReject(Enrollment enrollment){
+        return this.eventType==EventType.CONFIRMATIVE
+                && this.enrollments.contains(enrollment)
+                && !enrollment.isAttended()
+                && enrollment.isAccepted();
+    }
+
+    public boolean isAbleToAcceptWaitingEnrollment() {
+        return this.eventType==EventType.FCFS &&
+                this.limitOfEnrollments>this.getNumberOfAcceptedEnrollments();
+    }
+
+    public void addEnrollment(Enrollment enrollment) {
+        this.enrollments.add(enrollment);
+        enrollment.setEvent(this);
+    }
+
+    public void removeEnrollment(Enrollment enrollment) {
+        this.enrollments.remove(enrollment);
+        enrollment.setEvent(null);
+    }
+
+    public Enrollment getTheFirstWaitingEnrollment(){
+        for (Enrollment enrollment : enrollments) {
+            if(!enrollment.isAccepted()){
+                return enrollment;
+            }
+        }
+        return null;
+    }
+
+    public void acceptTheNextWaitingEnrollment() {
+        if(this.isAbleToAcceptWaitingEnrollment()){
+            Enrollment enrollment=this.getTheFirstWaitingEnrollment();
+            if(enrollment!=null){
+                enrollment.setAccepted(true);
+            }
+        }
+    }
 }

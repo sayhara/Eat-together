@@ -164,4 +164,10 @@ public class StudyService {
     public void removeMember(Study study, Account account) {
         study.removeMember(account);
     }
+
+    public Study getStudyToEnroll(String url) {
+        Study study=studyRepository.findStudyOnlyByUrl(url);
+        checkIfExistingStudy(url,study);
+        return study;
+    }
 }

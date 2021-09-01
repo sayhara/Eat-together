@@ -10,4 +10,6 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
     boolean existsByUrl(String url);
 
     Study findByUrl(String url);
+
+    Study findStudyOnlyByUrl(String url);
 }

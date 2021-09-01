@@ -143,4 +143,20 @@ public class EventController {
         return "redirect:/study/"+study.getUrl()+"/events";
     }
 
+    @PostMapping("/events/{id}/enroll")
+    public String newEnrollment(@AuthUser Account account, @PathVariable String url,
+                                @PathVariable Long id){
+        Study study = studyService.getStudyToEnroll(url);
+        eventService.newEnrollment(eventRepository.findById(id).orElseThrow(),account);
+        return "redirect:/study/"+study.getUrl()+"/events/"+id;
+    }
+
+    @PostMapping("/events/{id}/disenroll")
+    public String cancelEnrollment(@AuthUser Account account, @PathVariable String url,
+                                   @PathVariable Long id){
+        Study study = studyService.getStudyToEnroll(url);
+        eventService.cancelEnrollment(eventRepository.findById(id).orElseThrow(),account);
+        return "redirect:/study/"+study.getUrl()+"/events/"+id;
+    }
+
 }
