@@ -2,9 +2,11 @@ package com.eattogether.service;
 
 import com.eattogether.domain.Account;
 import com.eattogether.domain.Study;
+import com.eattogether.dto.StudyCreatedEvent;
 import com.eattogether.dto.StudyDescriptionForm;
 import com.eattogether.repository.StudyRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +19,7 @@ import java.nio.file.AccessDeniedException;
 public class StudyService {
 
     private final StudyRepository studyRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     public Study createNewStudy(Study study, Account account){
 
@@ -113,8 +116,9 @@ public class StudyService {
         }
     }
 
-    public void publish(Study study) {
+    public void publish(Study study) { // 스터디 공개
         study.publish();
+        eventPublisher.publishEvent(new StudyCreatedEvent(study));
     }
 
     public void close(Study study){

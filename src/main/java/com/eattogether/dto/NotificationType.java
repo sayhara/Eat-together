@@ -2,5 +2,5 @@ package com.eattogether.dto;
 
 public enum NotificationType {
 
-    STUDY_CREATED, STUDY_UPDATE;
+    STUDY_CREATED, STUDY_UPDATE, EVENT_ENROLLMENT;
 }
