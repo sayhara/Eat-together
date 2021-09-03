@@ -1,7 +1,6 @@
 package com.eattogether.domain;
 
 import com.eattogether.controller.UserAccount;
-import com.eattogether.dto.StudyCreatedEvent;
 import lombok.*;
 
 import javax.persistence.*;
