@@ -95,10 +95,10 @@ public class StudyController {
         return "redirect:/study/"+ study.getUrl()+"/members";
     }
 
-    @GetMapping("/search/study")
-    public String searchStudy(String keyword, Model model){
-        List<Study> studyList = studyRepository.findByKeyWord(keyword);
-    }
+//    @GetMapping("/search/study")
+//    public String searchStudy(String keyword, Model model){
+//        List<Study> studyList = studyRepository.findByKeyWord(keyword);
+//    }
 
 
 }

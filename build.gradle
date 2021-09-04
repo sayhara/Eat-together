@@ -35,7 +35,6 @@ dependencies {
 
     // QueryDSL
     implementation 'com.querydsl:querydsl-jpa'
-    implementation 'com.querydsl:querydsl-apt'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -51,22 +50,24 @@ test {
     useJUnitPlatform()
 }
 
-// QueryDSL
-def querydslSrcDir = "$buildDir/generated/querydsl"
+//querydsl 추가 시작
+def querydslDir = "$buildDir/generated/querydsl"
 
 querydsl {
     jpa = true
-    querydslSourcesDir = querydslSrcDir
+    querydslSourcesDir = querydslDir
 }
 
 sourceSets {
-    main.java.srcDirs querydslSrcDir
+    main.java.srcDir querydslDir
 }
 
 configurations {
     querydsl.extendsFrom compileClasspath
 }
 
-compileQuerydsl{
+compileQuerydsl {
     options.annotationProcessorPath = configurations.querydsl
 }
+//querydsl 추가 끝
+// 참고 : https://velog.io/@aidenshin/Querydsl-Gradle-%EC%84%A4%EC%A0%95
