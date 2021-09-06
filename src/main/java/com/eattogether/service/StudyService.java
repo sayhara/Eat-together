@@ -2,6 +2,7 @@ package com.eattogether.service;
 
 import com.eattogether.domain.Account;
 import com.eattogether.domain.Study;
+import com.eattogether.dto.StudyCreatedEvent;
 import com.eattogether.dto.StudyDescriptionForm;
 import com.eattogether.repository.StudyRepository;
 import lombok.RequiredArgsConstructor;
@@ -117,6 +118,7 @@ public class StudyService {
 
     public void publish(Study study) { // 스터디 공개
         study.publish();
+        this.eventPublisher.publishEvent(new StudyCreatedEvent(study));
     }
 
     public void close(Study study){

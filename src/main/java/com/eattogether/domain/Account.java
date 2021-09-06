@@ -45,6 +45,8 @@ public class Account {
 
     private boolean eatUpdatedByWeb=false; // - 관심있는 곳 - 웹으로 받기
 
+    private boolean studyCreatedByWeb=false;
+
 //    @OneToOne(mappedBy = "manager",fetch = FetchType.LAZY) // 상대 테이블의 객체이름
 //    private Meeting meeting;
 

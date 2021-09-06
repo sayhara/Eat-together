@@ -14,4 +14,6 @@ public interface StudyRepository extends JpaRepository<Study, Long>, StudyReposi
     Study findByUrl(String url);
 
     Study findStudyOnlyByUrl(String url);
+
+    Study findStudyWithZonesById(Long id);
 }
