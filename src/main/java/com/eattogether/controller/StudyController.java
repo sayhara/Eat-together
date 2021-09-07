@@ -5,7 +5,6 @@ import com.eattogether.domain.Account;
 import com.eattogether.domain.Study;
 import com.eattogether.dto.StudyForm;
 import com.eattogether.repository.StudyRepository;
-import com.eattogether.repository.StudyRepositoryExtension;
 import com.eattogether.service.StudyService;
 import com.eattogether.validator.StudyFormValidator;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,7 +28,6 @@ public class StudyController {
     private final StudyFormValidator studyFormValidator;
     private final StudyRepository studyRepository;
     private final ModelMapper modelMapper;
-    private final StudyRepositoryExtension studyRepositoryExtension;
 
     @InitBinder("studyForm")
     public void studyFormValidator(WebDataBinder webDataBinder){

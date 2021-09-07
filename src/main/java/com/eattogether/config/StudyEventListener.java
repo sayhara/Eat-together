@@ -36,11 +36,10 @@ public class StudyEventListener {
                 accountRepository.findAll(AccountPredicates.findByZones(study.getZones()));
 
         accounts.forEach(account -> {
-            if(account.isStudyCreatedByWeb()){
+            if(account.isEatCreatedByWeb()){
                 saveStudyCreatedNotification(study,account);
             }
         });
-
     }
 
     private void saveStudyCreatedNotification(Study study, Account account) {
@@ -48,7 +47,7 @@ public class StudyEventListener {
         notification.setTitle(study.getTitle());
         notification.setLink("/study/"+study.getUrl());
         notification.setChecked(false);
-        notification.setCreatedLocalDateTime(LocalDateTime.now());
+        notification.setCreatedDateTime(LocalDateTime.now());
         notification.setMessage(study.getShort_note());
         notification.setAccount(account);
         notification.setNotificationType(NotificationType.STUDY_CREATED);
