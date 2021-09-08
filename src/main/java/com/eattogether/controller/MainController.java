@@ -22,7 +22,7 @@ public class MainController {
         }
 
         long count=notificationRepository.countByAccountAndChecked(account,false);
-
+        model.addAttribute("hasNotification",count>0);
 
         return "main";
     }

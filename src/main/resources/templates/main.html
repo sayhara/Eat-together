@@ -18,72 +18,7 @@
 
 </head>
 <body class="bg-light">
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-    <a class="navbar-brand" href="/" th:href="@{/}">
-        <img src="/images/main_logo.png" width="30" height="30">
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <form th:action="@{/search/study}" class="form-inline" method="get">
-                    <input class="form-control mr-sm-2" name="keyword" type="search"
-                           placeholder="주변 찾기">
-                </form>
-            </li>
-        </ul>
-
-        <ul class="navbar-nav justify-content-end">
-            <li class="nav-item" sec:authorize="!isAuthenticated()">
-                <a class="nav-link" th:href="@{/login}">로그인
-                </a>
-            </li>
-            <li class="nav-item" sec:authorize="!isAuthenticated()">
-                <a class="nav-link" th:href="@{/sign-up}">가입
-                </a>
-            </li>
-
-            <li class="nav-item" sec:authorize="isAuthenticated()">
-                <a class="nav-link" th:href="@{/alarm}">
-                    <i class="far fa-clock"></i>
-                </a>
-            </li>
-
-            <li class="nav-item" sec:authorize="isAuthenticated()">
-                <a class="nav-link btn-outline-primary" th:href="@{/new-study}">
-                    <i class="fas fa-comment-dots"></i>
-                </a>
-            </li>
-
-            <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
-                <a class="nav-link dropdown-toggle" href="#" id="userDropdown"
-                   role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img th:if="${!#strings.isEmpty(account.profileImage)}" class="rounded"
-                         th:src="${account.profileImage}" width="25" height="25"/>
-                </a>
-
-                <div class="dropdown-menu dropdown-menu-sm-right" aria-labelledby="userDropdown">
-                    <h6 class="dropdown-header">
-                        <span sec:authentication="name">Username</span>
-                    </h6>
-                    <a class="dropdown-item"
-                       th:href="@{'/profile/'+${#authentication.name}}">프로필</a> <a
-                        class="dropdown-item">모임</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#" th:href="@{'/settings/profile'}">설정</a>
-                    <form class="form-inline my-2 my-lg-0" action="#"
-                          th:action="@{/logout}" method="post">
-                        <button class="dropdown-item" type="submit">로그아웃</button>
-                    </form>
-                </div>
-            </li>
-        </ul>
-    </div>
-</nav>
+<div th:replace="fragment.html :: navigation"></div>
 
 <div class="container">
     <div class="py-5 text-center">

@@ -4,6 +4,7 @@ import com.eattogether.domain.Account;
 import com.eattogether.domain.Study;
 import com.eattogether.dto.StudyCreatedEvent;
 import com.eattogether.dto.StudyDescriptionForm;
+import com.eattogether.dto.StudyUpdateEvent;
 import com.eattogether.repository.StudyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -60,28 +61,10 @@ public class StudyService {
         return study;
     }
 
-//    public Meeting createMeetingDescriptionForm(MeetingDescriptionForm descriptionForm) {
-//
-//        Meeting meeting=Meeting.builder()
-//                .short_note(descriptionForm.getShort_note())
-//                .long_note(descriptionForm.getLong_note())
-//                .build();
-//
-//        Meeting saveMeeting = meetingRepository.save(meeting);
-//
-//        return saveMeeting;
-//
-////        meeting.setShort_note(descriptionForm.getShort_note());
-////        meeting.setLong_note(descriptionForm.getLong_note());
-////        meetingRepository.save(meeting);
-////
-////        return meeting;
-//
-//    }
-
     public void updateStudyDescription(Study study, @Valid StudyDescriptionForm descriptionForm) {
         study.setShort_note(descriptionForm.getShort_note());
         study.setLong_note(descriptionForm.getLong_note());
+        eventPublisher.publishEvent(new StudyUpdateEvent(study,"스터디 소개를 수정했습니다."));
         studyRepository.save(study);
     }
 
@@ -123,14 +106,17 @@ public class StudyService {
 
     public void close(Study study){
         study.close();
+        eventPublisher.publishEvent(new StudyUpdateEvent(study,"스터디를 종료했습니다."));
     }
 
     public void startRecruit(Study study) {
         study.startRecruit();
+        eventPublisher.publishEvent(new StudyUpdateEvent(study,"팀원 모집을 시작합니다."));
     }
 
     public void stopRecruit(Study study) {
         study.stopRecruit();
+        eventPublisher.publishEvent(new StudyUpdateEvent(study,"팀원 모집을 중단했습니다."));
     }
 
     public boolean isValidUrl(String newUrl) {

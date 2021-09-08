@@ -5,6 +5,7 @@ import com.eattogether.domain.Notification;
 import com.eattogether.domain.Study;
 import com.eattogether.dto.NotificationType;
 import com.eattogether.dto.StudyCreatedEvent;
+import com.eattogether.dto.StudyUpdateEvent;
 import com.eattogether.repository.AccountRepository;
 import com.eattogether.repository.NotificationRepository;
 import com.eattogether.repository.StudyRepository;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Slf4j
 @Async
@@ -32,25 +35,42 @@ public class StudyEventListener {
     public void handleStudyCreatedEvent(StudyCreatedEvent studyCreatedEvent){
         Study study = studyRepository.findStudyWithZonesById(
                 studyCreatedEvent.getStudy().getId());
+
         Iterable<Account> accounts =
                 accountRepository.findAll(AccountPredicates.findByZones(study.getZones()));
 
         accounts.forEach(account -> {
             if(account.isEatCreatedByWeb()){
-                saveStudyCreatedNotification(study,account);
+                createNotification(study,account,study.getShort_note(),NotificationType.STUDY_CREATED);
             }
         });
     }
 
-    private void saveStudyCreatedNotification(Study study, Account account) {
+    @EventListener
+    public void handleStudyUpdateEvent(StudyUpdateEvent studyUpdateEvent){
+
+        Study study=studyRepository.findStudyWithManagersAndMembersById(studyUpdateEvent.getStudy().getId());
+        Set<Account> accounts=new HashSet<>();
+        accounts.addAll(study.getManagers());
+        accounts.addAll(study.getManagers());
+
+        accounts.forEach(account->{
+            if(account.isEatUpdatedByWeb()){
+                createNotification(study,account,study.getShort_note(),NotificationType.STUDY_UPDATED);
+            }
+        });
+    }
+
+    public void createNotification(Study study, Account account, String message,
+                                   NotificationType notificationType){
         Notification notification=new Notification();
         notification.setTitle(study.getTitle());
         notification.setLink("/study/"+study.getUrl());
         notification.setChecked(false);
         notification.setCreatedDateTime(LocalDateTime.now());
-        notification.setMessage(study.getShort_note());
+        notification.setMessage(message);
         notification.setAccount(account);
-        notification.setNotificationType(NotificationType.STUDY_CREATED);
+        notification.setNotificationType(notificationType);
         notificationRepository.save(notification);
     }
 }
