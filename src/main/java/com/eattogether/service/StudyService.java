@@ -2,6 +2,7 @@ package com.eattogether.service;
 
 import com.eattogether.domain.Account;
 import com.eattogether.domain.Study;
+import com.eattogether.domain.Zone;
 import com.eattogether.dto.StudyCreatedEvent;
 import com.eattogether.dto.StudyDescriptionForm;
 import com.eattogether.dto.StudyUpdateEvent;
@@ -159,5 +160,20 @@ public class StudyService {
         Study study=studyRepository.findStudyOnlyByUrl(url);
         checkIfExistingStudy(url,study);
         return study;
+    }
+
+    public Study getStudyUpdateZone(Account account, String url) throws AccessDeniedException {
+        Study study = studyRepository.findStudyWithZonesByUrl(url);
+        checkIfExistingStudy(url,study);
+        checkIfManager(account,study);
+        return study;
+    }
+
+    public void addZone(Study study, Zone zone) {
+        study.getZones().add(zone);
+    }
+
+    public void removeZone(Study study, Zone zone) {
+        study.getZones().remove(zone);
     }
 }

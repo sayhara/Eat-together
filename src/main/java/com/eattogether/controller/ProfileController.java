@@ -145,11 +145,11 @@ public class ProfileController {
     public String zoneSettings(@AuthUser Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
 
-        Set<Zone> zones = accountService.getZones(account);
+        Set<Zone> zones=accountService.getZones(account);
         model.addAttribute("zones",zones.stream().map(Zone::toString).collect(Collectors.toList()));
 
-        List<String> allZones = zoneRepository.findAll().stream().map(Zone::toString).collect(Collectors.toList());
-        model.addAttribute("whitelist",objectMapper.writeValueAsString(allZones));
+        List<String> allZones=zoneRepository.findAll().stream().map(Zone::toString).collect(Collectors.toList());
+        model.addAttribute("whitelist", objectMapper.writeValueAsString(allZones)); // String 타입으로 변환
 
         return "settings/zones";
 

@@ -3,11 +3,17 @@ package com.eattogether.controller;
 import com.eattogether.config.AuthUser;
 import com.eattogether.domain.Account;
 import com.eattogether.domain.Study;
+import com.eattogether.domain.Zone;
 import com.eattogether.dto.StudyDescriptionForm;
+import com.eattogether.dto.ZoneForm;
 import com.eattogether.repository.StudyRepository;
+import com.eattogether.repository.ZoneRepository;
 import com.eattogether.service.StudyService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -16,6 +22,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.nio.file.AccessDeniedException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/study/{url}/settings")
@@ -25,6 +33,8 @@ public class StudySettingsController {
     private final StudyService studyService;
     private final ModelMapper modelMapper;
     private final StudyRepository studyRepository;
+    private final ZoneRepository zoneRepository;
+    private final ObjectMapper objectMapper;
 
     @GetMapping("/description")
     public String viewStudySetting(@AuthUser Account account, @PathVariable String url, Model model)
@@ -101,6 +111,50 @@ public class StudySettingsController {
         Study study = studyService.getStudyUpdate(account, url);
         studyService.disableStudyBanner(study);
         return "redirect:/study/"+url+"/settings/banner";
+    }
+
+    @GetMapping("/zones")
+    public String zoneStudyForm(@AuthUser Account account, @PathVariable String url,
+                                Model model) throws AccessDeniedException, JsonProcessingException {
+        Study study = studyService.getStudyUpdate(account, url);
+        model.addAttribute(account);
+        model.addAttribute(study);
+        model.addAttribute("zones",study.getZones().stream().map(Zone::toString).collect(Collectors.toList()));
+
+        List<String> allZones = zoneRepository.findAll().stream().map(Zone::toString).collect(Collectors.toList());
+        model.addAttribute("whitelist",objectMapper.writeValueAsString(allZones));
+
+        return "study/settings/zones";
+    }
+
+    @PostMapping("zones/add")
+    @ResponseBody
+    public ResponseEntity addZone(@AuthUser Account account,
+                                  @PathVariable String url, @RequestBody ZoneForm zoneForm) throws AccessDeniedException {
+        Study study = studyService.getStudyUpdateZone(account, url);
+        Zone zone = zoneRepository.findByPart1AndPart2(zoneForm.getPart1(), zoneForm.getPart2());
+
+        if (zone == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        studyService.addZone(study,zone);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("zones/remove")
+    @ResponseBody
+    public ResponseEntity removeZone(@AuthUser Account account, @PathVariable String url,
+                                     @RequestBody ZoneForm zoneForm) throws AccessDeniedException {
+        Study study = studyService.getStudyUpdateZone(account, url);
+        Zone zone = zoneRepository.findByPart1AndPart2(zoneForm.getPart1(), zoneForm.getPart2());
+
+        if(zone==null){
+            return ResponseEntity.badRequest().build();
+        }
+
+        studyService.removeZone(study,zone);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/study")

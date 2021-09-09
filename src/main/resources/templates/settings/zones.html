@@ -22,7 +22,7 @@
                     <div id="whitelist" th:text="${whitelist}" hidden></div>
                     <input id="zones" type="text" name="zones"
                            th:value="${#strings.listJoin(zones,',')}" class="tagify-outside"
-                           aria-describedby="tagHelp" />
+                           aria-describedby="zoneHelp" />
 
                 </div>
             </div>
@@ -31,16 +31,6 @@
 </div>
 
 <script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
-<script type="application/javascript" th:inline="javascript">
-    $(function() {
-        var csrfToken = /*[[${_csrf.token}]]*/ null;
-        var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
-        $(document).ajaxSend(function (e, xhr, options) {
-            xhr.setRequestHeader(csrfHeader, csrfToken);
-        });
-    });
-</script>
-
 <script type="application/javascript">
     $(function(){
         function tagRequest(url,zoneName){
@@ -52,7 +42,7 @@
                 },
                 contentType:"application/json; charset=utf-8",
                 method:"POST",
-                url:"/settings/zones"+url,
+                url:"[(${baseUrl})]"+url,
                 data:JSON.stringify({'zoneName':zoneName})
             }).done(function(data,status){
                 console.log("${data} and status is ${status}");
@@ -84,7 +74,6 @@
         tagify.DOM.scope.parentNode.insertBefore(tagify.DOM.input,tagify.DOM.scope);
 
     });
-
 </script>
 </body>
 </html>
