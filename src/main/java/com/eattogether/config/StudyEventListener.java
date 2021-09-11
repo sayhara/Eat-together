@@ -24,7 +24,7 @@ import java.util.Set;
 @Async
 @Component
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class StudyEventListener {
 
     private final StudyRepository studyRepository;

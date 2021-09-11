@@ -9,6 +9,7 @@ import com.eattogether.service.StudyService;
 import com.eattogether.validator.StudyFormValidator;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -92,10 +94,13 @@ public class StudyController {
         return "redirect:/study/"+ study.getUrl()+"/members";
     }
 
-//    @GetMapping("/search/study")
-//    public String searchStudy(String keyword, Model model){
-//        List<Study> studyList = studyRepository.findByKeyWord(keyword);
-//    }
+    @GetMapping("/search/study")
+    public String searchStudy(Pageable pageable, String keyword, Model model){
+        List<Study> studyList = studyRepository.findByKeyword(keyword,pageable);
+        model.addAttribute("studyList",studyList);
+        model.addAttribute("keyword",keyword);
+        return "search";
+    }
 
 
 }

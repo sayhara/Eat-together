@@ -2,6 +2,7 @@ package com.eattogether.config;
 
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -15,7 +16,8 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .mvcMatchers("/","/login","/sign-up","/login-by-email",
-                        "/email-login","/check-email-login","/login-link").permitAll()
+                        "/email-login","/check-email-login","/login-link","/search/study").permitAll()
+                .mvcMatchers(HttpMethod.GET,"/profile/*").permitAll()
                 .anyRequest().authenticated();  // 나머지는 로그인을 통해서만 접근가능
 
         http.formLogin()
