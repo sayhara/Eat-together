@@ -9,7 +9,10 @@ import com.eattogether.service.StudyService;
 import com.eattogether.validator.StudyFormValidator;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -95,11 +98,22 @@ public class StudyController {
     }
 
     @GetMapping("/search/study")
-    public String searchStudy(Pageable pageable, String keyword, Model model){
-        List<Study> studyList = studyRepository.findByKeyword(keyword,pageable);
-        model.addAttribute("studyList",studyList);
+    public String searchStudy(String keyword, Model model,
+                              @PageableDefault(size = 9,sort = "startTime",direction = Sort.Direction.ASC)
+                                      Pageable pageable){
+        Page<Study> studyPage = studyRepository.findByKeyword(keyword, pageable);
+        model.addAttribute("studyPage",studyPage);
         model.addAttribute("keyword",keyword);
+        model.addAttribute("sortProperty",
+                pageable.getSort().toString().contains("startTime")?
+                "startTime":"memberCount");
         return "search";
+    }
+
+    @GetMapping("/study/data")
+    public String generateTestData(@AuthUser Account account){
+        studyService.generateTestStudies(account);
+        return "redirect:/";
     }
 
 

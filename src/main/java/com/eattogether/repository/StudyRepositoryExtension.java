@@ -10,5 +10,5 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface StudyRepositoryExtension {
 
-    List<Study> findByKeyword(String keyword, Pageable pageable);
+    Page<Study> findByKeyword(String keyword, Pageable pageable);
 }

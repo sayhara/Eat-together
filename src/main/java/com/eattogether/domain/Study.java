@@ -61,7 +61,10 @@ public class Study {
     
     private boolean useBanner; // 베너 사용여부
 
-    public void addManager(Account account){
+    private int memberCount;
+
+    public void addManager(Account account)
+    {
         this.managers.add(account);
     }
 
@@ -118,9 +121,11 @@ public class Study {
 
     public void addMember(Account account) {
         this.getMembers().add(account);
+        memberCount++;
     }
 
     public void removeMember(Account account) {
         this.getMembers().remove(account);
+        memberCount--;
     }
 }

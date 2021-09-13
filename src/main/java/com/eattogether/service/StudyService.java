@@ -8,12 +8,14 @@ import com.eattogether.dto.StudyDescriptionForm;
 import com.eattogether.dto.StudyUpdateEvent;
 import com.eattogether.repository.StudyRepository;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import java.nio.file.AccessDeniedException;
+import java.util.HashSet;
 
 @Service
 @Transactional
@@ -175,5 +177,20 @@ public class StudyService {
 
     public void removeZone(Study study, Zone zone) {
         study.getZones().remove(zone);
+    }
+
+    public void generateTestStudies(Account account) {
+        for(int i=0;i<30;i++){
+            String randomValue= RandomString.make(5);
+            Study study = Study.builder()
+                    .title("테스트 스터디" + randomValue)
+                    .url("test-" + randomValue)
+                    .short_note("test")
+                    .long_note("테스트용 스터디")
+                    .managers(new HashSet<>())
+                    .build();
+            study.publish();
+            createNewStudy(study, account);
+        }
     }
 }
