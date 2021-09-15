@@ -53,6 +53,9 @@ public class Account {
 //    private Meeting meet_member;
 
     @ManyToMany
+    private Set<Tag> tags=new HashSet<>();
+
+    @ManyToMany
     private Set<Zone> zones=new HashSet<>();
 
     public boolean isManagerOf(Study study){

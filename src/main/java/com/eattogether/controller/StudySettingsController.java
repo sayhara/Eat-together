@@ -132,7 +132,7 @@ public class StudySettingsController {
     public ResponseEntity addZone(@AuthUser Account account,
                                   @PathVariable String url, @RequestBody ZoneForm zoneForm) throws AccessDeniedException {
         Study study = studyService.getStudyUpdateZone(account, url);
-        Zone zone = zoneRepository.findByPart1AndPart2(zoneForm.getPart1(), zoneForm.getPart2());
+        Zone zone = zoneRepository.findByPart1AndPart3(zoneForm.getPart1(), zoneForm.getPart3());
 
         if (zone == null) {
             return ResponseEntity.badRequest().build();
@@ -147,7 +147,7 @@ public class StudySettingsController {
     public ResponseEntity removeZone(@AuthUser Account account, @PathVariable String url,
                                      @RequestBody ZoneForm zoneForm) throws AccessDeniedException {
         Study study = studyService.getStudyUpdateZone(account, url);
-        Zone zone = zoneRepository.findByPart1AndPart2(zoneForm.getPart1(), zoneForm.getPart2());
+        Zone zone = zoneRepository.findByPart1AndPart3(zoneForm.getPart1(), zoneForm.getPart3());
 
         if(zone==null){
             return ResponseEntity.badRequest().build();

@@ -2,6 +2,7 @@ package com.eattogether.service;
 
 import com.eattogether.domain.Account;
 import com.eattogether.controller.UserAccount;
+import com.eattogether.domain.Tag;
 import com.eattogether.domain.Zone;
 import com.eattogether.dto.*;
 import com.eattogether.repository.AccountRepository;
@@ -101,4 +102,18 @@ public class AccountService implements UserDetailsService {
         byId.ifPresent(a->a.getZones().remove(zone));
     }
 
+    public Set<Tag> getTags(Account account) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        return byId.orElseThrow().getTags();
+    }
+
+    public void addTag(Account account, Tag tag) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        byId.ifPresent(a->a.getTags().add(tag));
+    }
+
+    public void removeTag(Account account, Tag tag) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        byId.ifPresent(a->a.getTags().remove(tag));
+    }
 }

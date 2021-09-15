@@ -2,9 +2,11 @@ package com.eattogether.controller;
 
 import com.eattogether.config.AuthUser;
 import com.eattogether.domain.Account;
+import com.eattogether.domain.Tag;
 import com.eattogether.domain.Zone;
 import com.eattogether.dto.*;
 import com.eattogether.repository.AccountRepository;
+import com.eattogether.repository.TagRepository;
 import com.eattogether.repository.ZoneRepository;
 import com.eattogether.service.AccountService;
 import com.eattogether.validator.NicknameFormValidator;
@@ -33,6 +35,7 @@ public class ProfileController {
     private final AccountService accountService;
     private final PasswordFormValidator passwordFormValidator;
     private final NicknameFormValidator nicknameFormValidator;
+    private final TagRepository tagRepository;
     private final ZoneRepository zoneRepository;
     private final ObjectMapper objectMapper;
 
@@ -141,6 +144,46 @@ public class ProfileController {
         return "redirect:/settings/nickname";
     }
 
+    @GetMapping("/settings/tags")
+    public String updateTags(@AuthUser Account account, Model model) throws JsonProcessingException {
+        model.addAttribute(account);
+        Set<Tag> tags = accountService.getTags(account);
+        model.addAttribute("tags",tags.stream().map(Tag::getTitle).collect(Collectors.toList()));
+
+        List<String> allTags = tagRepository.findAll().stream().map(Tag::getTitle).collect(Collectors.toList());
+        model.addAttribute("whitelist",objectMapper.writeValueAsString(allTags)); // JSON형식으로 변환
+
+        return "settings/tags";
+    }
+
+    @PostMapping("/settings/tags/add")
+    @ResponseBody
+    public ResponseEntity addTag(@AuthUser Account account, @RequestBody TagForm tagForm){
+        String title = tagForm.getTagTitle();
+        Tag tag = tagRepository.findByTitle(title);
+
+        if(tag==null){
+            tag = tagRepository.save(Tag.builder().title(tagForm.getTagTitle()).build());
+        }
+
+        accountService.addTag(account,tag);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/settings/tags/remove")
+    @ResponseBody
+    public ResponseEntity removeTag(@AuthUser Account account, @RequestBody TagForm tagForm){
+        String title = tagForm.getTagTitle();
+        Tag tag = tagRepository.findByTitle(title);
+
+        if(tag==null){
+            return ResponseEntity.badRequest().build();
+        }
+
+        accountService.removeTag(account,tag);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/settings/zones")
     public String zoneSettings(@AuthUser Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
@@ -159,7 +202,7 @@ public class ProfileController {
     @ResponseBody
     public ResponseEntity addZone(@AuthUser Account account, @RequestBody ZoneForm zoneForm){
 
-        Zone zone=zoneRepository.findByPart1AndPart2(zoneForm.getPart1(),zoneForm.getPart2());
+        Zone zone=zoneRepository.findByPart1AndPart3(zoneForm.getPart1(),zoneForm.getPart3());
 
         if (zone == null) {
             return ResponseEntity.badRequest().build();
@@ -173,7 +216,7 @@ public class ProfileController {
     @ResponseBody
     public ResponseEntity removeZone(@AuthUser Account account, @RequestBody ZoneForm zoneForm){
 
-        Zone zone = zoneRepository.findByPart1AndPart2(zoneForm.getPart1(), zoneForm.getPart2());
+        Zone zone = zoneRepository.findByPart1AndPart3(zoneForm.getPart1(), zoneForm.getPart3());
 
         if(zone==null){
             return ResponseEntity.badRequest().build();
