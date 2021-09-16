@@ -33,11 +33,11 @@ public class StudyEventListener {
 
     @EventListener
     public void handleStudyCreatedEvent(StudyCreatedEvent studyCreatedEvent){
-        Study study = studyRepository.findStudyWithZonesById(
+        Study study = studyRepository.findStudyWithTagsZonesById(
                 studyCreatedEvent.getStudy().getId());
 
         Iterable<Account> accounts =
-                accountRepository.findAll(AccountPredicates.findByZones(study.getZones()));
+                accountRepository.findAll(AccountPredicates.findByTagsAndZones(study.getTags(), study.getZones()));
 
         accounts.forEach(account -> {
             if(account.isEatCreatedByWeb()){

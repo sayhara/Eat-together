@@ -45,6 +45,9 @@ public class Study {
     private String image;
 
     @ManyToMany
+    private Set<Tag> tags=new HashSet<>();
+
+    @ManyToMany
     private Set<Zone> zones=new HashSet<>();
 
     private LocalDateTime startTime;
@@ -128,4 +131,6 @@ public class Study {
         this.getMembers().remove(account);
         memberCount--;
     }
+
+
 }

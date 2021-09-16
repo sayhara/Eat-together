@@ -1,6 +1,7 @@
 package com.eattogether.config;
 
 import com.eattogether.domain.QAccount;
+import com.eattogether.domain.Tag;
 import com.eattogether.domain.Zone;
 import com.querydsl.core.types.Predicate;
 
@@ -8,8 +9,8 @@ import java.util.Set;
 
 public class AccountPredicates {
 
-    public static Predicate findByZones(Set<Zone> zones){
+    public static Predicate findByTagsAndZones(Set<Tag> tags, Set<Zone> zones){
         QAccount account=QAccount.account;
-        return account.zones.any().in(zones);
+        return account.zones.any().in(zones).and(account.tags.any().in(tags));
     }
 }

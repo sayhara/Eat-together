@@ -68,7 +68,6 @@ public class StudyService {
         study.setShort_note(descriptionForm.getShort_note());
         study.setLong_note(descriptionForm.getLong_note());
         eventPublisher.publishEvent(new StudyUpdateEvent(study,"스터디 소개를 수정했습니다."));
-        studyRepository.save(study);
     }
 
     public void updateStudyImage(Study study, String image) {
