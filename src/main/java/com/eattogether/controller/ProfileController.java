@@ -23,6 +23,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -73,7 +74,7 @@ public class ProfileController {
     }
 
     @PostMapping("/settings/profile")
-    public String profileUpdate(@AuthUser Account account, Profile profile,
+    public String profileUpdate(@AuthUser Account account, @Valid Profile profile,
                                 Errors errors, Model model, RedirectAttributes attributes){
         if(errors.hasErrors()){
             model.addAttribute(account);
