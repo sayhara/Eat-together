@@ -7,6 +7,7 @@ import com.eattogether.domain.Zone;
 import com.eattogether.dto.*;
 import com.eattogether.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,18 +29,14 @@ public class AccountService implements UserDetailsService {
 
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
 
     public Account makeAccount(SignUpForm signUpForm){
-        Account account = Account.builder()
-                .nickname(signUpForm.getNickname())
-                .email(signUpForm.getEmail())
-                .password(passwordEncoder.encode(signUpForm.getPassword()))
-                .passwordRepeat(passwordEncoder.encode(signUpForm.getPasswordRepeat()))
-                .eatCreatedByWeb(true)
-                .build();
 
-        Account newAccount = accountRepository.save(account);
-        return newAccount;
+        signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
+        signUpForm.setPasswordRepeat(passwordEncoder.encode(signUpForm.getPasswordRepeat()));
+        Account account = modelMapper.map(signUpForm, Account.class);
+        return accountRepository.save(account);
     }
 
     public void login(Account account) {

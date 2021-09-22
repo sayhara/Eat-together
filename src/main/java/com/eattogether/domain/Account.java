@@ -39,11 +39,11 @@ public class Account {
 
     private String location;    // 위치
 
-    private boolean eatCreatedByWeb=false; // 개설 - 웹으로 받기
+    private boolean eatCreatedByWeb=true; // 개설 - 웹으로 받기
 
-    private boolean eatEnrollmentResultByWeb=false; // 참가신청 - 웹으로 받기
+    private boolean eatEnrollmentResultByWeb=true; // 참가신청 - 웹으로 받기
 
-    private boolean eatUpdatedByWeb=false; // - 관심있는 곳 - 웹으로 받기
+    private boolean eatUpdatedByWeb=true; // - 관심있는 곳 - 웹으로 받기
 
 //    @OneToOne(mappedBy = "manager",fetch = FetchType.LAZY) // 상대 테이블의 객체이름
 //    private Meeting meeting;
