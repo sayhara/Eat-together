@@ -271,7 +271,7 @@ class ProfileControllerTest {
         Zone zone = zoneRepository.findByPart1AndPart3(testZone.getPart1(), testZone.getPart3());
         accountService.addZone(gyuwon,zone);
 
-        assertTrue(gyuwon.getZones().contains(testZone));
+        assertTrue(gyuwon.getZones().contains(zone));
 
         ZoneForm zoneForm=new ZoneForm();
         zoneForm.setZoneName(testZone.toString());
