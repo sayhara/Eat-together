@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class ZoneForm {
 
+    // 입력형태 : Seoul(서울)/None
     private String zoneName;
 
     public String getPart1Name(){

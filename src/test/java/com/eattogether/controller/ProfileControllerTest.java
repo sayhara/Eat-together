@@ -2,10 +2,13 @@ package com.eattogether.controller;
 
 import com.eattogether.domain.Account;
 import com.eattogether.domain.Tag;
+import com.eattogether.domain.Zone;
 import com.eattogether.dto.SignUpForm;
 import com.eattogether.dto.TagForm;
+import com.eattogether.dto.ZoneForm;
 import com.eattogether.repository.AccountRepository;
 import com.eattogether.repository.TagRepository;
+import com.eattogether.repository.ZoneRepository;
 import com.eattogether.service.AccountService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mysema.commons.lang.Assert;
@@ -53,6 +56,10 @@ class ProfileControllerTest {
     @Autowired
     TagRepository tagRepository;
 
+    @Autowired
+    ZoneRepository zoneRepository;
+
+    private Zone testZone=Zone.builder().part1("테스트1").part2("테스트2").part3("테스트3").build();
 
     @BeforeEach
     void beforeEach(){
@@ -62,11 +69,13 @@ class ProfileControllerTest {
         signUpForm.setPassword("123456789");
         signUpForm.setPasswordRepeat("123456789");
         accountService.makeAccount(signUpForm);
+        zoneRepository.save(testZone);
     }
 
     @AfterEach
     void afterEach(){
         accountRepository.deleteAll();
+        zoneRepository.deleteAll();
     }
 
     /*
@@ -220,5 +229,61 @@ class ProfileControllerTest {
 
         assertFalse(gyuwon.getTags().contains(newTag));
     }
+    
+    //지역정보 테스트
+    @WithUserDetails(value="gyuwon", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName("계정에 지역정보 수정 폼")
+    @Test
+    void updateZoneForm() throws Exception{
+        mockMvc.perform(get("/settings/zones"))
+                .andExpect(view().name("settings/zones"))
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("zones"))
+                .andExpect(model().attributeExists("whitelist"));
+    }
+
+    @WithUserDetails(value = "gyuwon", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName("계정에 지역정보 추가")
+    @Test
+    void addZone() throws Exception{
+
+        ZoneForm zoneForm=new ZoneForm();
+        zoneForm.setZoneName(testZone.toString());
+
+        mockMvc.perform(post("/settings/zones/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(zoneForm))
+                .with(csrf()))
+                .andExpect(status().isOk());
+
+        Zone newZone=zoneRepository.findByPart1AndPart3(testZone.getPart1(),testZone.getPart3());
+        assertNotNull(newZone);
+
+        assertTrue(accountRepository.findByNickname("gyuwon").getZones().contains(newZone));
+    }
+
+    @WithUserDetails(value = "gyuwon", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName("계정에 지역정보 삭제")
+    @Test
+    void removeZone() throws Exception{
+
+        Account gyuwon=accountRepository.findByNickname("gyuwon");
+        Zone zone = zoneRepository.findByPart1AndPart3(testZone.getPart1(), testZone.getPart3());
+        accountService.addZone(gyuwon,zone);
+
+        assertTrue(gyuwon.getZones().contains(testZone));
+
+        ZoneForm zoneForm=new ZoneForm();
+        zoneForm.setZoneName(testZone.toString());
+
+        mockMvc.perform(post("/settings/zones/remove")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(zoneForm))
+                .with(csrf()))
+                .andExpect(status().isOk());
+
+        assertFalse(gyuwon.getZones().contains(zone));
+    }
+
 
 }
