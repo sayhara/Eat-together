@@ -148,9 +148,9 @@ ${event.id} + '/enrollments/' + ${enroll.id} + '/cancel-checkin'}">체크인 취
             <dt class="font-weight-light">모집 방법</dt>
             <dd>
                     <span th:if="${event.eventType ==
-T(com.eattogether.dto.EventType).FCFS}">선착순</span>
+T(com.jpaproject.dto.EventType).FCFS}">선착순</span>
                 <span th:if="${event.eventType ==
-T(com.eattogether.dto.EventType).CONFIRMATIVE}">관리자 확인</span>
+T(com.jpaproject.dto.EventType).CONFIRMATIVE}">관리자 확인</span>
             </dd>
 
             <dt class="font-weight-light">모집 인원</dt>
